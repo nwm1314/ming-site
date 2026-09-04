@@ -2,13 +2,16 @@ import { expect, test } from '@playwright/test';
 
 import {
   getAdjacentPosts,
+  getPageCount,
   getRelatedPosts,
   isPublicPost,
+  paginatePosts,
   readingTime,
   slugifyTaxonomy,
   type PublicPostLike,
 } from '../../src/lib/content/rules';
 import { isNavigationActive } from '../../src/lib/navigation';
+import { fixturePosts } from '../fixtures/posts';
 
 function post(id: string, overrides: Partial<PublicPostLike['data']> = {}): PublicPostLike {
   return {
@@ -73,5 +76,26 @@ test.describe('content rules', () => {
       'same-context',
       'shared-tag',
     ]);
+  });
+
+  test('paginates boundary-sized collections without needing production fixtures', () => {
+    const cases = [
+      { count: 0, pages: 0 },
+      { count: 1, pages: 1 },
+      { count: 8, pages: 1 },
+      { count: 9, pages: 2 },
+      { count: 16, pages: 2 },
+      { count: 17, pages: 3 },
+    ];
+
+    for (const { count, pages } of cases) {
+      const posts = fixturePosts(count);
+      expect(getPageCount(posts.length, 8)).toBe(pages);
+      expect(paginatePosts(posts, 1, 8).posts).toHaveLength(Math.min(count, 8));
+
+      if (pages > 1) {
+        expect(paginatePosts(posts, pages, 8).posts).toHaveLength(count % 8 || 8);
+      }
+    }
   });
 });

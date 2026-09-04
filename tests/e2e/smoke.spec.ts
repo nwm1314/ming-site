@@ -16,13 +16,11 @@ test('mobile menu opens and exposes navigation', async ({ page }) => {
   await expect(page.locator('[data-mobile-menu] a').first()).toBeVisible();
 });
 
-test('blog index and second page render public posts', async ({ page }) => {
+test('blog index renders the current public posts without fixture-dependent pagination', async ({ page }) => {
   await page.goto('/blog');
   await expect(page.locator('h1')).toContainText('Blog');
-  await expect(page.locator('.post-row')).toHaveCount(8);
-  await page.goto('/blog/page/2');
-  await expect(page.locator('.post-row')).toHaveCount(1);
-  await expect(page.locator('.pagination-status')).toContainText('02 / 02');
+  await expect(page.locator('.post-row')).toHaveCount(2);
+  await expect(page.locator('.pagination')).toHaveCount(0);
 });
 
 test('article detail includes metadata, toc and code copy control', async ({ page }) => {
@@ -47,8 +45,18 @@ test('search returns Pagefind results', async ({ page }) => {
   await page.goto('/search');
   await page.locator('#search-input').fill('Astro');
   await page.locator('[data-search-form]').locator('button').click();
+  await expect(page).toHaveURL(/\/search\/?\?q=Astro$/);
   await expect(page.locator('.search-result').first()).toBeVisible();
   await expect(page.locator('[data-search-status]')).toContainText('找到');
+  await expect(page.locator('.search-result')).toHaveCount(1);
+  await expect(page.locator('.search-result').first()).toHaveAttribute('href', '/blog/static-first/');
+});
+
+test('staging pages and robots are not indexable by default', async ({ page, request }) => {
+  await page.goto('/blog');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+  const robots = await request.get('/robots.txt');
+  expect(await robots.text()).toContain('Disallow: /');
 });
 
 test('unknown routes use the designed 404 page', async ({ page }) => {

@@ -11,6 +11,8 @@ export interface PublicPostLike {
     series?: string;
     canonical?: string | URL;
     toc?: boolean;
+    cover?: string;
+    coverAlt?: string;
   };
   body?: string;
 }
@@ -57,6 +59,29 @@ export function readingTime(markdown: string) {
 /** One shared rule for every production-facing post query. */
 export function isPublicPost(post: Pick<PublicPostLike, 'data'>, now = new Date()) {
   return !post.data.draft && post.data.publishDate.valueOf() <= now.valueOf();
+}
+
+export function getPageCount(totalItems: number, pageSize: number) {
+  if (!Number.isInteger(pageSize) || pageSize < 1) {
+    throw new RangeError('pageSize must be a positive integer');
+  }
+
+  return Math.ceil(Math.max(0, totalItems) / pageSize);
+}
+
+export function paginatePosts<T>(posts: T[], page: number, pageSize: number) {
+  if (!Number.isInteger(page) || page < 1) {
+    throw new RangeError('page must be a positive integer');
+  }
+
+  const totalPages = getPageCount(posts.length, pageSize);
+  const start = (page - 1) * pageSize;
+
+  return {
+    page,
+    totalPages,
+    posts: posts.slice(start, start + pageSize),
+  };
 }
 
 export function normalizeTaxonomyName(value: string) {

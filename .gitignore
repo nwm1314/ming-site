@@ -3,6 +3,7 @@ dist/
 .astro/
 .vercel/
 .wrangler/
+.dev.vars*
 .env
 .env.*
 !.env.example

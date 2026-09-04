@@ -339,7 +339,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: -0.0
 .article-meta a:hover, .article-tags a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; font-family: var(--mono); font-size: 0.65rem; }
 .article-tags a { padding: 5px 8px; border: 1px solid var(--line); color: var(--ink-soft); }
-.article-cover { display: block; width: 100%; max-height: 460px; margin-top: 42px; border: 1px solid var(--ink); object-fit: cover; }
+.article-cover { display: block; width: 100%; aspect-ratio: 16 / 9; max-height: 460px; margin-top: 42px; border: 1px solid var(--ink); object-fit: cover; }
 .article-reading-grid { display: grid; grid-template-columns: 180px minmax(0, 760px); gap: 64px; align-items: start; }
 .article-toc { position: sticky; top: 28px; padding-top: 12px; border-top: 1px solid var(--ink); }
 .article-toc .eyebrow { margin-bottom: 16px; }

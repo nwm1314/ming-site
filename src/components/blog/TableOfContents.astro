@@ -11,7 +11,7 @@ const visibleHeadings = headings.filter((heading) => heading.depth === 2 || head
 ---
 
 {enabled && visibleHeadings.length > 0 && (
-  <nav class="article-toc" aria-label="On this page">
+  <nav class="article-toc" aria-label="On this page" data-pagefind-ignore>
     <p class="eyebrow">/ on this page</p>
     <ol>
       {visibleHeadings.map((heading) => (

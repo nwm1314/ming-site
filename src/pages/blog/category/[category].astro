@@ -1,7 +1,6 @@
 ---
 import Header from '../../../components/common/Header.astro';
 import Footer from '../../../components/common/Footer.astro';
-import Pagination from '../../../components/blog/Pagination.astro';
 import PostList from '../../../components/blog/PostList.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { site } from '../../../config/site';
@@ -24,10 +23,9 @@ const { term, posts } = Astro.props;
   canonical={`${site.siteUrl}/blog/category/${encodeURIComponent(term.slug)}`}
 >
   <Header />
-  <main id="main-content" class="content-page" data-pagefind-body>
+  <main id="main-content" class="content-page">
     <div class="page-intro"><p class="eyebrow">/ category</p><h1>{term.displayName}<span class="hero-punctuation">.</span></h1><p>{posts.length} 篇公开文章，按发布时间倒序排列。</p></div>
     <PostList posts={posts} />
-    <Pagination page={1} totalPages={1} />
   </main>
   <Footer />
 </BaseLayout>

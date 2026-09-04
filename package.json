@@ -3,10 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22.0.0 <25.0.0",
+    "pnpm": ">=11.19.0 <12.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
+    "deploy": "pnpm build && pnpm exec wrangler deploy",
+    "cf:preview": "pnpm build && pnpm exec wrangler dev",
+    "cf:dry-run": "pnpm build && pnpm exec wrangler deploy --dry-run",
     "check": "astro check",
     "lint": "eslint .",
     "format": "prettier --check .",
@@ -14,7 +22,8 @@
     "test": "pnpm test:unit && pnpm test:e2e",
     "test:unit": "playwright test tests/unit --config=playwright.unit.config.ts",
     "test:e2e": "playwright test tests/e2e",
-    "test:e2e:ui": "playwright test tests/e2e --ui"
+    "test:e2e:ui": "playwright test tests/e2e --ui",
+    "test:cf": "node scripts/test-cloudflare-routing.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.0",
@@ -37,6 +46,7 @@
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "4.129.0"
   }
 }
