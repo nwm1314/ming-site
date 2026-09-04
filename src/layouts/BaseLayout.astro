@@ -26,6 +26,7 @@ const {
   jsonLd,
 } = Astro.props;
 
+const shouldNoindex = noindex || !site.indexable;
 const canonicalUrl = (canonical ?? new URL(Astro.url.pathname, site.siteUrl)).toString();
 const imageUrl = new URL(image, site.siteUrl).toString();
 const personJsonLd = {
@@ -46,7 +47,7 @@ const structuredData = [personJsonLd, ...(jsonLd ? (Array.isArray(jsonLd) ? json
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#d7f36b" />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {shouldNoindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="alternate" type="application/rss+xml" title={`${site.siteName} RSS`} href={`${site.siteUrl}/rss.xml`} />
