@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2.5 — Release Candidate / Deployment Foundation
+Phase 2.5 — Release Candidate ready for Cloudflare staging
 
 ## Completed
 
@@ -35,6 +35,7 @@ Phase 2.5 — Release Candidate / Deployment Foundation
 
 - Target: Cloudflare Workers + Static Assets, Worker name `ming-site`, assets directory `./dist`.
 - GitHub repository: `nwm1314/ming-site`; production branch `main`; preview branches `feature/*`.
+- PR #1 is merged into `main`; the release gate is complete and the next environment step is Cloudflare staging deployment.
 - Workers Builds commands are documented in `docs/DEPLOYMENT.md`; production deploy is deliberately not run by Codex.
 
 ## Test Fixture Strategy
