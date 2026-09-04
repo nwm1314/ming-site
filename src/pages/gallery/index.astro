@@ -1,0 +1,12 @@
+---
+import Header from '../../components/common/Header.astro';
+import Footer from '../../components/common/Footer.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const gallery = await getCollection('gallery');
+---
+
+<BaseLayout title="Gallery — Ming" description="Ming 的图像角落。">
+  <Header /><main id="main-content" class="content-page"><div class="page-intro"><p class="eyebrow">/ visual notes</p><h1>Gallery<span class="hero-punctuation">.</span></h1><p>一些画面，先从工作台这一角开始。</p></div><div class="gallery-grid">{gallery.map((item) => <figure class="gallery-item"><img src={item.data.image} alt={item.data.alt} loading="lazy" /><figcaption><strong>{item.data.title}</strong><span>{item.data.album} · {item.data.location}</span></figcaption></figure>)}</div></main><Footer />
+</BaseLayout>

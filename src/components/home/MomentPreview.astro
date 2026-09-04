@@ -1,0 +1,18 @@
+---
+import { formatDate, getPublicMoments } from '../../lib/content';
+
+const moments = (await getPublicMoments()).slice(0, 2);
+---
+
+<section class="moment-section section-pad">
+  <div class="moment-card reveal-up">
+    <div class="moment-card-header"><p class="eyebrow">/ small moments</p><span aria-hidden="true">✳</span></div>
+    {moments.length > 0 ? moments.map((moment) => (
+      <article class="moment-entry">
+        <div class="moment-date">{formatDate(moment.data.publishDate, { year: 'numeric', month: '2-digit', day: '2-digit' })}</div>
+        <div class="moment-body"><Fragment set:html={moment.body} /><div class="moment-tags">{moment.data.tags.map((tag) => <span>#{tag}</span>)}</div></div>
+      </article>
+    )) : <p class="moment-empty">这里会放下一次散步、一次 debug，或者一个突然想通的瞬间。</p>}
+    <a class="moment-more" href="/moments">更多小记录 <span aria-hidden="true">→</span></a>
+  </div>
+</section>

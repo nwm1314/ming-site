@@ -1,0 +1,12 @@
+---
+import { getCollection } from 'astro:content';
+
+const uses = (await getCollection('uses')).sort((a, b) => a.data.order - b.data.order).slice(0, 6);
+---
+
+<section class="desk-section section-pad">
+  <div class="desk-intro reveal-up"><p class="eyebrow">/ digital desk</p><h2>我的工具，<em>没有评分条</em>。</h2><p>它们只是陪我把想法推到下一步。</p></div>
+  <div class="desk-grid reveal-up" style="--delay: 100ms">
+    {uses.map((use, index) => <div class="desk-item"><span class="desk-icon">{use.data.icon}</span><div><span class="desk-category">{use.data.category}</span><strong>{use.data.name}</strong><p>{use.data.description}</p></div><span class="desk-index">0{index + 1}</span></div>)}
+  </div>
+</section>

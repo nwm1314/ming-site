@@ -1,0 +1,26 @@
+---
+import { getFeaturedProjects } from '../../lib/content';
+
+const projects = await getFeaturedProjects();
+---
+
+<section class="projects-section section-pad" id="projects">
+  <div class="section-heading section-heading-row reveal-up">
+    <div><p class="eyebrow">/ selected work</p><h2>正在做的，<em>小而重要</em>。</h2></div>
+    <a class="text-link hide-mobile" href="/projects">所有项目 <span aria-hidden="true">↗</span></a>
+  </div>
+
+  {projects.length > 0 ? (
+    <div class="project-grid">
+      {projects.map((project, index) => (
+        <a class:list={{ 'project-card': true, 'project-card-featured': index === 0 }} href={`/projects/${project.id}`}>
+          <div class="project-card-top"><span class="project-number">0{index + 1}</span><span class="project-status"><span class="status-dot"></span>{project.data.status}</span></div>
+          <div class="project-card-content"><h3>{project.data.title}</h3><p>{project.data.summary}</p></div>
+          <div class="project-card-bottom"><span>{project.data.stack.slice(0, 3).join(' · ')}</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+        </a>
+      ))}
+    </div>
+  ) : (
+    <div class="empty-state">项目正在整理中，下一张卡片很快会出现。</div>
+  )}
+</section>

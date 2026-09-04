@@ -1,0 +1,12 @@
+---
+import { getCollection } from 'astro:content';
+import Header from '../../components/common/Header.astro';
+import Footer from '../../components/common/Footer.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Projects — Ming" description="Ming 正在构建与维护的项目。">
+  <Header /><main id="main-content" class="content-page"><div class="page-intro"><p class="eyebrow">/ selected work</p><h1>Projects<span class="hero-punctuation">.</span></h1><p>一些正在生长的东西，一些已经学会自己走路的东西。</p></div><div class="project-grid page-project-grid">{projects.map((project, index) => <a class:list={{ 'project-card': true, 'project-card-featured': project.data.featured }} href={`/projects/${project.id}`}><div class="project-card-top"><span class="project-number">0{index + 1}</span><span class="project-status"><span class="status-dot"></span>{project.data.status}</span></div><div class="project-card-content"><h3>{project.data.title}</h3><p>{project.data.summary}</p></div><div class="project-card-bottom"><span>{project.data.stack.join(' · ')}</span><span class="card-arrow" aria-hidden="true">↗</span></div></a>)}</div></main><Footer />
+</BaseLayout>

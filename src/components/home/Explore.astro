@@ -1,0 +1,10 @@
+---
+import { exploreLinks } from '../../config/navigation';
+---
+
+<section class="explore-section section-pad">
+  <div class="section-heading reveal-up"><p class="eyebrow">/ open tabs</p><h2>随便逛逛，<em>别客气</em>。</h2></div>
+  <div class="explore-grid reveal-up" style="--delay: 100ms">
+    {exploreLinks.map((link) => <a class="explore-link" href={link.href}><span class="explore-mark">{link.mark}</span><span><strong>{link.label}</strong><small>{link.note}</small></span><span class="explore-arrow" aria-hidden="true">↗</span></a>)}
+  </div>
+</section>

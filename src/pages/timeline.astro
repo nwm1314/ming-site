@@ -1,0 +1,13 @@
+---
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../lib/content';
+
+const timeline = (await getCollection('timeline')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Timeline — Ming" description="Ming 的阶段与里程碑。">
+  <Header /><main id="main-content" class="content-page"><div class="page-intro"><p class="eyebrow">/ the long view</p><h1>Timeline<span class="hero-punctuation">.</span></h1><p>不急着填满，重要的节点会自己浮上来。</p></div><div class="timeline-list">{timeline.map((item) => <article class="timeline-item"><span class="timeline-date">{formatDate(item.data.date, { month: 'short', day: '2-digit' })}</span><div><span class="desk-category">{item.data.type}</span><h2>{item.data.title}</h2><p>{item.data.description}</p></div></article>)}</div></main><Footer />
+</BaseLayout>

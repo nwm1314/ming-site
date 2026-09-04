@@ -1,0 +1,27 @@
+---
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import DigitalDesk from '../components/home/DigitalDesk.astro';
+import Explore from '../components/home/Explore.astro';
+import FeaturedProjects from '../components/home/FeaturedProjects.astro';
+import Hero from '../components/home/Hero.astro';
+import LatestPosts from '../components/home/LatestPosts.astro';
+import MomentPreview from '../components/home/MomentPreview.astro';
+import NowPanel from '../components/home/NowPanel.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout title={site.title} description={site.description}>
+  <Header />
+  <main id="main-content">
+    <Hero />
+    <NowPanel />
+    <FeaturedProjects />
+    <LatestPosts />
+    <DigitalDesk />
+    <MomentPreview />
+    <Explore />
+  </main>
+  <Footer />
+</BaseLayout>

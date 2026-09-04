@@ -1,0 +1,11 @@
+---
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 — page not found" noindex>
+  <Header />
+  <main id="main-content" class="simple-page"><p class="eyebrow">/ lost tab</p><h1>这页走丢了<span class="hero-punctuation">.</span></h1><p>可能是链接换了位置，也可能它还没长出来。</p><a class="button button-primary" href="/">回到首页 <span aria-hidden="true">↗</span></a></main>
+  <Footer />
+</BaseLayout>

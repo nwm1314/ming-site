@@ -1,0 +1,33 @@
+---
+import { site } from '../../config/site';
+---
+
+<section class="now-section section-pad" id="now">
+  <div class="section-heading reveal-up">
+    <p class="eyebrow">/ now</p>
+    <h2>这段时间，<em>正在发生</em>。</h2>
+    <p>不是履历，是此刻打开的几个 tab。</p>
+  </div>
+
+  <div class="now-board reveal-up" style="--delay: 100ms">
+    <div class="now-board-top">
+      <span class="board-label">CURRENT STATUS</span>
+      <span class="board-date">updated {site.now.updatedAt}</span>
+    </div>
+    <div class="now-items">
+      <div class="now-item now-item-main">
+        <span class="now-index">01</span>
+        <div><span class="now-kicker">currently building</span><strong>{site.now.building}</strong></div>
+        <span class="now-scribble" aria-hidden="true">✎</span>
+      </div>
+      <div class="now-item">
+        <span class="now-index">02</span>
+        <div><span class="now-kicker">exploring</span><strong>{site.now.exploring}</strong></div>
+      </div>
+      <div class="now-item">
+        <span class="now-index">03</span>
+        <div><span class="now-kicker">learning</span><strong>{site.now.learning}</strong></div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,22 @@
+---
+import Header from '../../components/common/Header.astro';
+import Footer from '../../components/common/Footer.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Lab — Ming" description="Ming 的实验区。">
+  <Header />
+  <main id="main-content" class="content-page">
+    <div class="page-intro"><p class="eyebrow">/ unfinished experiments</p><h1>Lab<span class="hero-punctuation">.</span></h1><p>这里是未来动态 Web App 的入口，现在先保持安静。</p></div>
+    <div class="lab-placeholder">
+      <div class="lab-terminal">
+        <span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span>
+        <pre><code>$ ls ./lab
+coming-soon/
+ideas-that-need-time/</code></pre>
+      </div>
+      <p>第一个真正值得做的实验出现时，再打开这扇门。</p>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
