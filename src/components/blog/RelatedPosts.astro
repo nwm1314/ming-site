@@ -1,0 +1,27 @@
+---
+import { type PostEntry } from '../../lib/content';
+
+interface Props {
+  posts: PostEntry[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="related-posts" aria-labelledby="related-posts-title">
+    <div class="section-heading-row">
+      <div><p class="eyebrow">/ keep exploring</p><h2 id="related-posts-title">Related <em>notes</em>.</h2></div>
+    </div>
+    <div class="related-post-grid">
+      {posts.map((post) => (
+        <a class="related-post" href={`/blog/${post.id}`}>
+          <span class="post-category">{post.data.category}</span>
+          <strong>{post.data.title}</strong>
+          <small>{post.data.description}</small>
+          <span class="related-arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+)}

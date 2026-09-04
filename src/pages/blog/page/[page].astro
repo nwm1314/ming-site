@@ -1,0 +1,39 @@
+---
+import Header from '../../../components/common/Header.astro';
+import Footer from '../../../components/common/Footer.astro';
+import Pagination from '../../../components/blog/Pagination.astro';
+import PostList from '../../../components/blog/PostList.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { site } from '../../../config/site';
+import { BLOG_PAGE_SIZE, getPublicPosts } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getPublicPosts();
+  const totalPages = Math.ceil(posts.length / BLOG_PAGE_SIZE);
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+    const page = index + 2;
+    return {
+      params: { page: String(page) },
+      props: { posts, page, totalPages },
+    };
+  });
+}
+
+const { posts, page, totalPages } = Astro.props;
+const pagePosts = posts.slice((page - 1) * BLOG_PAGE_SIZE, page * BLOG_PAGE_SIZE);
+---
+
+<BaseLayout
+  title={`Blog — page ${page} — Ming`}
+  description="Ming 的技术笔记、实验记录与生活观察。"
+  canonical={`${site.siteUrl}/blog/page/${page}`}
+>
+  <Header />
+  <main id="main-content" class="content-page" data-pagefind-body>
+    <div class="page-intro"><p class="eyebrow">/ notebook · page {page}</p><h1>Blog<span class="hero-punctuation">.</span></h1><p>按发布时间倒序排列的公开文章。</p></div>
+    <PostList posts={pagePosts} startIndex={(page - 1) * BLOG_PAGE_SIZE} />
+    <Pagination page={page} totalPages={totalPages} />
+  </main>
+  <Footer />
+</BaseLayout>

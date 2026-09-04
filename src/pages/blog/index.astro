@@ -2,16 +2,24 @@
 import Header from '../../components/common/Header.astro';
 import Footer from '../../components/common/Footer.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate, getPublicPosts, readingTime } from '../../lib/content';
+import Pagination from '../../components/blog/Pagination.astro';
+import PostList from '../../components/blog/PostList.astro';
+import TaxonomyNav from '../../components/blog/TaxonomyNav.astro';
+import { BLOG_PAGE_SIZE, getPublicPosts, getTaxonomyTerms } from '../../lib/content';
 
 const posts = await getPublicPosts();
+const categories = getTaxonomyTerms(posts, 'category');
+const tags = getTaxonomyTerms(posts, 'tag');
+const totalPages = Math.ceil(posts.length / BLOG_PAGE_SIZE);
 ---
 
 <BaseLayout title="Blog — Ming" description="Ming 的技术笔记、实验记录与生活观察。">
   <Header />
-  <main id="main-content" class="content-page">
+  <main id="main-content" class="content-page" data-pagefind-body>
     <div class="page-intro"><p class="eyebrow">/ notebook</p><h1>Blog<span class="hero-punctuation">.</span></h1><p>技术、工具、踩坑，以及一些还在发酵的想法。</p></div>
-    <div class="post-list page-post-list">{posts.map((post, index) => <a class="post-row" href={`/blog/${post.id}`}><span class="post-index">{String(index + 1).padStart(2, '0')}</span><span class="post-category">{post.data.category}</span><span class="post-title">{post.data.title}</span><span class="post-description">{post.data.description}</span><span class="post-date">{formatDate(post.data.publishDate)} · {readingTime(post.body ?? '')} min</span><span class="post-arrow" aria-hidden="true">↗</span></a>)}</div>
+    <TaxonomyNav categories={categories} tags={tags} />
+    <PostList posts={posts.slice(0, BLOG_PAGE_SIZE)} />
+    <Pagination page={1} totalPages={totalPages} />
   </main>
   <Footer />
 </BaseLayout>

@@ -1,0 +1,24 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  enabled: boolean;
+}
+
+const { headings, enabled } = Astro.props;
+const visibleHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+
+{enabled && visibleHeadings.length > 0 && (
+  <nav class="article-toc" aria-label="On this page">
+    <p class="eyebrow">/ on this page</p>
+    <ol>
+      {visibleHeadings.map((heading) => (
+        <li class:list={{ 'toc-child': heading.depth === 3 }}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

@@ -1,0 +1,22 @@
+---
+import { taxonomyHref, type TaxonomyTerm } from '../../lib/content';
+
+interface Props {
+  kind: 'category' | 'tag';
+  terms: TaxonomyTerm[];
+}
+
+const { kind, terms } = Astro.props;
+const isTag = kind === 'tag';
+---
+
+<div class="taxonomy-overview">
+  {terms.map((term, index) => (
+    <a class="taxonomy-overview-item" href={taxonomyHref(kind, term.slug)}>
+      <span class="post-index">{String(index + 1).padStart(2, '0')}</span>
+      <strong>{isTag ? `#${term.displayName}` : term.displayName}</strong>
+      <span>{term.count} {term.count === 1 ? 'post' : 'posts'}</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+  ))}
+</div>

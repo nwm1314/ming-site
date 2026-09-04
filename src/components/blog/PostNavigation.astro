@@ -1,0 +1,31 @@
+---
+import { formatDate, type PostEntry } from '../../lib/content';
+
+interface Props {
+  previous?: PostEntry;
+  next?: PostEntry;
+}
+
+const { previous, next } = Astro.props;
+---
+
+<nav class="post-navigation" aria-label="Post navigation">
+  <div class="post-navigation-item">
+    {previous ? (
+      <a href={`/blog/${previous.id}`}>
+        <span class="eyebrow">← Previous post · newer</span>
+        <strong>{previous.data.title}</strong>
+        <small>{formatDate(previous.data.publishDate)}</small>
+      </a>
+    ) : <span class="post-navigation-empty">This is the newest note.</span>}
+  </div>
+  <div class="post-navigation-item post-navigation-next">
+    {next ? (
+      <a href={`/blog/${next.id}`}>
+        <span class="eyebrow">Next post · older →</span>
+        <strong>{next.data.title}</strong>
+        <small>{formatDate(next.data.publishDate)}</small>
+      </a>
+    ) : <span class="post-navigation-empty">This is the oldest note.</span>}
+  </div>
+</nav>

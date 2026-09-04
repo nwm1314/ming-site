@@ -1,0 +1,25 @@
+---
+interface Props {
+  page: number;
+  totalPages: number;
+}
+
+const { page, totalPages } = Astro.props;
+const pageHref = (value: number) => (value === 1 ? '/blog' : `/blog/page/${value}`);
+---
+
+{totalPages > 1 && (
+  <nav class="pagination" aria-label="Blog pagination">
+    {page > 1 ? (
+      <a class="pagination-link" href={pageHref(page - 1)} rel="prev">
+        <span aria-hidden="true">←</span> Previous
+      </a>
+    ) : <span class="pagination-link pagination-disabled" aria-hidden="true"><span>←</span> Previous</span>}
+    <span class="pagination-status" aria-current="page">{String(page).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}</span>
+    {page < totalPages ? (
+      <a class="pagination-link" href={pageHref(page + 1)} rel="next">
+        Next <span aria-hidden="true">→</span>
+      </a>
+    ) : <span class="pagination-link pagination-disabled" aria-hidden="true">Next <span>→</span></span>}
+  </nav>
+)}

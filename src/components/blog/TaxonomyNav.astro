@@ -1,0 +1,25 @@
+---
+import { taxonomyHref, type TaxonomyTerm } from '../../lib/content';
+
+interface Props {
+  categories: TaxonomyTerm[];
+  tags: TaxonomyTerm[];
+}
+
+const { categories, tags } = Astro.props;
+---
+
+<section class="taxonomy-nav" aria-label="Browse blog taxonomy" data-pagefind-ignore>
+  <div class="taxonomy-group">
+    <span class="eyebrow">/ categories</span>
+    <div class="taxonomy-links">
+      {categories.map((term) => <a href={taxonomyHref('category', term.slug)}>{term.displayName}<small>{term.count}</small></a>)}
+    </div>
+  </div>
+  <div class="taxonomy-group">
+    <span class="eyebrow">/ tags</span>
+    <div class="taxonomy-links">
+      {tags.map((term) => <a href={taxonomyHref('tag', term.slug)}>#{term.displayName}<small>{term.count}</small></a>)}
+    </div>
+  </div>
+</section>

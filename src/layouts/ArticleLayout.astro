@@ -1,0 +1,132 @@
+---
+import { render } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import PostNavigation from '../components/blog/PostNavigation.astro';
+import RelatedPosts from '../components/blog/RelatedPosts.astro';
+import TableOfContents from '../components/blog/TableOfContents.astro';
+import BaseLayout from './BaseLayout.astro';
+import {
+  formatDate,
+  getAdjacentPosts,
+  getPublicPosts,
+  getRelatedPosts,
+  readingTime,
+  slugifyTaxonomy,
+  taxonomyHref,
+  type PostEntry,
+} from '../lib/content';
+import { site } from '../config/site';
+
+interface Props {
+  post: PostEntry;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const publicPosts = await getPublicPosts();
+const { previous, next } = getAdjacentPosts(publicPosts, post.id);
+const relatedPosts = getRelatedPosts(post, publicPosts);
+const cover = post.data.cover || site.defaults.ogImage;
+const canonical = (post.data.canonical ?? new URL(`/blog/${post.id}`, site.siteUrl)).toString();
+const publishedTime = post.data.publishDate.toISOString();
+const modifiedTime = (post.data.updatedDate ?? post.data.publishDate).toISOString();
+const blogPostingJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: publishedTime,
+  dateModified: modifiedTime,
+  mainEntityOfPage: canonical,
+  url: canonical,
+  author: { '@id': `${site.siteUrl}#person` },
+  publisher: { '@id': `${site.siteUrl}#person` },
+  image: new URL(cover, site.siteUrl).toString(),
+};
+
+const articleHeadings = headings as MarkdownHeading[];
+---
+
+<BaseLayout
+  title={`${post.data.title} — ${site.siteName}`}
+  description={post.data.description}
+  image={cover}
+  ogType="article"
+  canonical={canonical}
+  articlePublishedTime={publishedTime}
+  articleModifiedTime={modifiedTime}
+  jsonLd={blogPostingJsonLd}
+>
+  <Header />
+  <main id="main-content" class="article-page" data-pagefind-body>
+    <article>
+      <header class="article-header">
+        <a class="back-link" href="/blog">← all notes</a>
+        <div class="article-meta">
+          <a href={taxonomyHref('category', slugifyTaxonomy(post.data.category))}>{post.data.category}</a>
+          <span aria-hidden="true">·</span>
+          <time datetime={publishedTime}>{formatDate(post.data.publishDate)}</time>
+          {post.data.updatedDate && <><span aria-hidden="true">·</span><span>updated {formatDate(post.data.updatedDate)}</span></>}
+          <span aria-hidden="true">·</span>
+          <span>{readingTime(post.body ?? '')} min read</span>
+        </div>
+        <h1>{post.data.title}</h1>
+        <p class="article-lede">{post.data.description}</p>
+        {post.data.tags.length > 0 && (
+          <div class="article-tags" aria-label="Tags">
+            {post.data.tags.map((tag) => <a href={taxonomyHref('tag', slugifyTaxonomy(tag))}>#{tag}</a>)}
+          </div>
+        )}
+        {post.data.cover && <img class="article-cover" src={post.data.cover} alt="" loading="eager" />}
+      </header>
+
+      <div class="article-reading-grid">
+        <aside><TableOfContents headings={articleHeadings} enabled={post.data.toc} /></aside>
+        <div class="article-body prose"><Content /></div>
+      </div>
+
+      <section class="comments-boundary" data-comments-boundary aria-label="Comments boundary">
+        <span class="eyebrow">/ comments</span>
+        <p>Comments are reserved for a future, privacy-conscious provider.</p>
+      </section>
+      <PostNavigation previous={previous} next={next} />
+      <RelatedPosts posts={relatedPosts} />
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<script>
+  for (const pre of document.querySelectorAll<HTMLPreElement>('.article-body pre')) {
+    if (pre.parentElement?.classList.contains('code-block')) continue;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block';
+    pre.parentNode?.insertBefore(wrapper, pre);
+    wrapper.append(pre);
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'code-copy';
+    button.textContent = 'Copy';
+    button.setAttribute('aria-label', 'Copy code to clipboard');
+    wrapper.append(button);
+
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText);
+        button.textContent = 'Copied';
+        button.dataset.copied = 'true';
+        window.setTimeout(() => {
+          button.textContent = 'Copy';
+          delete button.dataset.copied;
+        }, 1800);
+      } catch {
+        button.textContent = 'Select code';
+        window.setTimeout(() => { button.textContent = 'Copy'; }, 1800);
+      }
+    });
+  }
+</script>

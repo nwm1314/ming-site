@@ -1,26 +1,13 @@
 ---
-import { getCollection, render } from 'astro:content';
-import Header from '../../components/common/Header.astro';
-import Footer from '../../components/common/Footer.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate } from '../../lib/content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getPublicPosts } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const posts = await getPublicPosts();
   return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
 ---
 
-<BaseLayout title={`${post.data.title} — Ming`} description={post.data.description}>
-  <Header />
-  <main id="main-content" class="article-page">
-    <article>
-      <header class="article-header"><a class="back-link" href="/blog">← all notes</a><p class="eyebrow">{post.data.category} · {formatDate(post.data.publishDate)}</p><h1>{post.data.title}</h1><p class="article-lede">{post.data.description}</p></header>
-      <div class="article-body prose"><Content /></div>
-    </article>
-  </main>
-  <Footer />
-</BaseLayout>
+<ArticleLayout post={post} />

@@ -1,0 +1,29 @@
+---
+import { formatDate, readingTime, type PostEntry } from '../../lib/content';
+
+interface Props {
+  posts: PostEntry[];
+  startIndex?: number;
+}
+
+const { posts, startIndex = 0 } = Astro.props;
+---
+
+<div class="post-list page-post-list">
+  {posts.length > 0 ? (
+    posts.map((post, index) => (
+      <a class="post-row" href={`/blog/${post.id}`}>
+        <span class="post-index">{String(startIndex + index + 1).padStart(2, '0')}</span>
+        <span class="post-category"><span>{post.data.category}</span></span>
+        <span class="post-title">{post.data.title}</span>
+        <span class="post-description">{post.data.description}</span>
+        <span class="post-date">
+          {formatDate(post.data.publishDate)} · {readingTime(post.body ?? '')} min
+        </span>
+        <span class="post-arrow" aria-hidden="true">↗</span>
+      </a>
+    ))
+  ) : (
+    <p class="empty-state">这里暂时还没有公开文章。</p>
+  )}
+</div>
