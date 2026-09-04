@@ -31,8 +31,8 @@ const currentPath = Astro.url.pathname;
         <span data-theme-icon aria-hidden="true">◐</span>
         <span data-theme-label>System</span>
       </button>
-      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu">
-        <span class="sr-only">Open menu</span>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="sr-only" data-menu-label>Open menu</span>
         <span aria-hidden="true">☰</span>
       </button>
     </div>
@@ -48,8 +48,10 @@ const currentPath = Astro.url.pathname;
   const themeButton = document.querySelector('[data-theme-toggle]');
   const themeLabel = document.querySelector('[data-theme-label]');
   const themeIcon = document.querySelector('[data-theme-icon]');
-  const menuButton = document.querySelector('[data-menu-toggle]');
+  const menuButton = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menuLabel = document.querySelector('[data-menu-label]');
   const mobileMenu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+  const firstMobileLink = mobileMenu?.querySelector<HTMLAnchorElement>('a');
   const themes: Array<'system' | 'light' | 'dark'> = ['system', 'light', 'dark'];
 
   function setTheme(theme: 'system' | 'light' | 'dark') {
@@ -69,9 +71,29 @@ const currentPath = Astro.url.pathname;
     setTheme(nextTheme);
   });
 
+  function setMenuState(isOpen: boolean, moveFocus = false) {
+    if (!menuButton) return;
+
+    menuButton.setAttribute('aria-expanded', String(isOpen));
+    menuButton.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    if (menuLabel) menuLabel.textContent = isOpen ? 'Close menu' : 'Open menu';
+    if (mobileMenu) mobileMenu.hidden = !isOpen;
+    if (isOpen && moveFocus) firstMobileLink?.focus();
+  }
+
   menuButton?.addEventListener('click', () => {
     const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
-    menuButton.setAttribute('aria-expanded', String(!isOpen));
-    if (mobileMenu) mobileMenu.hidden = isOpen;
+    setMenuState(!isOpen, !isOpen);
+  });
+
+  mobileMenu?.addEventListener('click', (event) => {
+    if (event.target instanceof Element && event.target.closest('a')) setMenuState(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menuButton?.getAttribute('aria-expanded') === 'true') {
+      setMenuState(false);
+      menuButton.focus();
+    }
   });
 </script>

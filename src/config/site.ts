@@ -31,7 +31,7 @@ export const site = {
   author: 'Ming',
   avatar: {
     src: '',
-    alt: 'Ming 的头像占位',
+    alt: 'Ming 的字母标记',
     fallback: 'M',
   },
   hero: {
@@ -39,7 +39,7 @@ export const site = {
     name: 'Ming',
     role: '把好奇心做成可以打开的东西。',
     bio: '在代码、网络和一点点生活观察之间来回切换。这里是我的工作台：放项目，也放还没想明白的念头。',
-    status: 'currently building in public',
+    status: 'currently building ming-site',
   },
   now: {
     building: 'ming-site / 一个会慢慢长大的个人主页',

@@ -11,9 +11,23 @@ test('home and theme switch are usable', async ({ page }) => {
 test('mobile menu opens and exposes navigation', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
-  await page.locator('[data-menu-toggle]').click();
-  await expect(page.locator('[data-mobile-menu]')).toBeVisible();
-  await expect(page.locator('[data-mobile-menu] a').first()).toBeVisible();
+  const menuButton = page.locator('[data-menu-toggle]');
+  const mobileMenu = page.locator('[data-mobile-menu]');
+
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+  await expect(menuButton).toHaveAccessibleName('Open menu');
+  await menuButton.focus();
+  await page.keyboard.press('Enter');
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+  await expect(menuButton).toHaveAccessibleName('Close menu');
+  await expect(mobileMenu).toBeVisible();
+  await expect(mobileMenu.locator('a').first()).toBeFocused();
+
+  await page.keyboard.press('Escape');
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+  await expect(menuButton).toHaveAccessibleName('Open menu');
+  await expect(mobileMenu).toBeHidden();
+  await expect(menuButton).toBeFocused();
 });
 
 test('blog index renders the current public posts without fixture-dependent pagination', async ({ page }) => {
@@ -48,8 +62,13 @@ test('search returns Pagefind results', async ({ page }) => {
   await expect(page).toHaveURL(/\/search\/?\?q=Astro$/);
   await expect(page.locator('.search-result').first()).toBeVisible();
   await expect(page.locator('[data-search-status]')).toContainText('找到');
-  await expect(page.locator('.search-result')).toHaveCount(1);
-  await expect(page.locator('.search-result').first()).toHaveAttribute('href', '/blog/static-first/');
+  await expect(page.locator('.search-result')).not.toHaveCount(0);
+  await expect(page.locator('.search-result[href="/blog/static-first/"]')).toBeVisible();
+
+  await page.locator('#search-input').fill('qzzzznoresult');
+  await page.locator('[data-search-form]').locator('button').click();
+  await expect(page.locator('[data-search-status]')).toContainText('没有找到');
+  await expect(page.locator('.search-result')).toHaveCount(0);
 });
 
 test('staging pages and robots are not indexable by default', async ({ page, request }) => {

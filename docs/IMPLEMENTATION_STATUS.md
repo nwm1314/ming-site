@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2.5 — Release Candidate ready for Cloudflare staging
+Phase 2.6 — Brand & Responsive Polish
 
 ## Completed
 
@@ -21,6 +21,11 @@ Phase 2.5 — Release Candidate ready for Cloudflare staging
 - Added the small `pnpm test:cf` Workers Static Assets routing smoke test and made it part of the GitHub Actions Quality gate. It checks real HTTP statuses and the custom 404 response without duplicating the E2E suite.
 - Fixed the build-time `SITE_URL` path for Astro's Node-loaded configuration so the generated sitemap uses the same override as canonical, OG, JSON-LD, RSS, and robots.
 - Ignored Wrangler's generated `.wrangler/` directory in ESLint so local Cloudflare validation cannot cause project type-parser errors.
+- Replaced unfinished avatar and contact placeholders with an intentional initials mark and the existing GitHub link; no unverified personal details were added.
+- Added a readable light-theme `--coral-text` token while keeping bright Coral, Lime, and Sky as decorative accents.
+- Reworked Hero spacing and responsive type so the large `Ming.` composition keeps its editorial character without covering the Chinese subtitle from phone through desktop widths.
+- Made the mobile menu stateful and keyboard-friendly: synchronized accessible names, `aria-expanded`, `aria-controls`, first-link focus, Escape close, and focus return.
+- Expanded `hello-from-the-desk` into a short intro article and made both project summaries concrete without inventing personal history or results.
 
 ## Architecture Decisions
 
@@ -58,7 +63,7 @@ Phase 2.5 — Release Candidate ready for Cloudflare staging
 
 ## Known Issues
 
-- Avatar, email, and some personal copy remain Phase 1 placeholders; this build is staging/preview, not a formal launch.
+- No portrait or public email is configured; the site intentionally uses an initials mark and the existing GitHub link until real personal assets or contact details are available.
 - Pagefind does not stem Chinese terms; exact/substring search remains available.
 - No comments provider is connected by design.
 - `pnpm format` still reports historical formatting drift in 58 files outside this release task; it was not applied because it would create a broad, low-value diff. This does not block the release gate.
@@ -72,6 +77,7 @@ Phase 2.5 — Release Candidate ready for Cloudflare staging
 - `pnpm test:unit` — passed, 7 tests including pagination boundaries.
 - `pnpm test:e2e` — passed, 8 Chromium smoke tests.
 - `pnpm test:cf` — passed under `wrangler dev --local`: `/`, `/blog`, existing article, `/search`, `/rss.xml`, `/robots.txt`, and `/404` returned 200; unknown path returned HTTP 404 with the custom 404 marker.
+- Phase 2.6 browser review — Chromium screenshots captured at 320×720, 390×844, 768×900, 1024×768, and 1440×900 in Light and Dark themes; no horizontal overflow and no Hero subtitle overlap observed. Mobile menu open/close, Escape, and focus return passed.
 - `pnpm cf:dry-run` — passed with Wrangler 4.129.0; 77 static assets read, no upload performed.
 - Output checks — 2 public article routes, 2 RSS items, draft/future fixture content absent from public output, no comments placeholder, no taxonomy/list/search Pagefind duplicates, staging noindex/robots behavior verified, and `SITE_URL` override verified across canonical/OG/RSS/sitemap-index/sitemap/robots/JSON-LD.
 

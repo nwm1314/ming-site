@@ -16,11 +16,10 @@ import { site } from '../../config/site';
   </div>
 
   <div class="hero-portrait reveal-up" style="--delay: 120ms">
-    <div class="avatar-card">
+    <div class="avatar-card" role="img" aria-label={site.avatar.alt}>
       <div class="avatar-orbit avatar-orbit-one"></div>
       <div class="avatar-orbit avatar-orbit-two"></div>
       {site.avatar.src ? <img src={site.avatar.src} alt={site.avatar.alt} /> : <span class="avatar-placeholder">{site.avatar.fallback}</span>}
-      <span class="avatar-caption">avatar<br />coming soon</span>
     </div>
     <div class="hero-sticker">✦<br /><span>stay curious</span></div>
     <div class="hero-status"><span class="status-dot"></span>{site.hero.status}</div>
