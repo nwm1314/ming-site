@@ -36,6 +36,9 @@ jobs:
       - name: Build Astro site and Pagefind index
         run: pnpm build
 
+      - name: Run Cloudflare Static Assets routing smoke test
+        run: pnpm test:cf
+
       - name: Install Chromium for smoke tests
         run: pnpm exec playwright install --with-deps chromium
 

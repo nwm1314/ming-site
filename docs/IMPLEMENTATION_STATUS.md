@@ -17,6 +17,10 @@ Phase 2.5 — Release Candidate / Deployment Foundation
 - Added centralized build-time `SITE_URL` resolution with a safe localhost fallback and `SITE_INDEXABLE=false` as the default release boundary. Base metadata and `robots.txt` now follow that single setting.
 - Added `.node-version` (`22`), `packageManager` (`pnpm@11.19.0`), compatible engines, `.env.example`, and CI version-file usage.
 - Added Wrangler `4.129.0`, `wrangler.jsonc`, Workers Static Assets scripts, and deployment documentation. No Pages adapter, SSR, Worker API, database, CMS, comments provider, or analytics was introduced.
+- Aligned `wrangler.jsonc` with the installed Wrangler schema: `workers_dev: true`, `preview_urls: true`, `html_handling: "auto-trailing-slash"`, `not_found_handling: "404-page"`, and `run_worker_first: false`.
+- Added the small `pnpm test:cf` Workers Static Assets routing smoke test and made it part of the GitHub Actions Quality gate. It checks real HTTP statuses and the custom 404 response without duplicating the E2E suite.
+- Fixed the build-time `SITE_URL` path for Astro's Node-loaded configuration so the generated sitemap uses the same override as canonical, OG, JSON-LD, RSS, and robots.
+- Ignored Wrangler's generated `.wrangler/` directory in ESLint so local Cloudflare validation cannot cause project type-parser errors.
 
 ## Architecture Decisions
 
@@ -24,6 +28,8 @@ Phase 2.5 — Release Candidate / Deployment Foundation
 - The production public-post rule remains `draft === false && publishDate <= build time`; all production-facing post queries use the shared helper.
 - Site URL and indexability are build-time configuration, not route-local checks. `SITE_URL` drives canonical, RSS, sitemap, robots, OG, and JSON-LD values.
 - GitHub Actions remains a quality gate. Cloudflare Workers Builds owns deployment and receives no production token from this repository.
+- Static Assets are served first for every request. There is no Worker main script; unknown paths use `dist/404.html` with HTTP 404, and SPA fallback remains disabled.
+- `workers_dev` and Wrangler Preview URLs are explicitly enabled. Workers Builds uses `wrangler deploy` for `main` and `wrangler versions upload` for non-production branches.
 
 ## Cloudflare Decision
 
@@ -47,14 +53,14 @@ Phase 2.5 — Release Candidate / Deployment Foundation
 
 - Staging defaults to `SITE_INDEXABLE=false`, emits `noindex, nofollow`, and serves `robots.txt` with `Disallow: /`.
 - Final launch only needs `SITE_URL` set to the custom domain and `SITE_INDEXABLE=true` in Workers Builds variables after content and visual review.
-- Local commands: `pnpm dev`, `pnpm preview`, `pnpm cf:preview`, `pnpm cf:dry-run`, and `pnpm deploy`.
+- Local commands: `pnpm dev`, `pnpm preview`, `pnpm cf:preview`, `pnpm cf:dry-run`, `pnpm test:cf`, and `pnpm deploy`.
 
 ## Known Issues
 
 - Avatar, email, and some personal copy remain Phase 1 placeholders; this build is staging/preview, not a formal launch.
 - Pagefind does not stem Chinese terms; exact/substring search remains available.
 - No comments provider is connected by design.
-- The existing repository-wide `pnpm format` check still reports historical formatting drift outside this release task; lint, type/content check, build, unit, E2E, and Wrangler dry-run are green.
+- `pnpm format` still reports historical formatting drift in 58 files outside this release task; it was not applied because it would create a broad, low-value diff. This does not block the release gate.
 
 ## Verification
 
@@ -64,8 +70,9 @@ Phase 2.5 — Release Candidate / Deployment Foundation
 - `pnpm build` — passed; 25 static pages generated and 2 Pagefind pages indexed.
 - `pnpm test:unit` — passed, 7 tests including pagination boundaries.
 - `pnpm test:e2e` — passed, 8 Chromium smoke tests.
+- `pnpm test:cf` — passed under `wrangler dev --local`: `/`, `/blog`, existing article, `/search`, `/rss.xml`, `/robots.txt`, and `/404` returned 200; unknown path returned HTTP 404 with the custom 404 marker.
 - `pnpm cf:dry-run` — passed with Wrangler 4.129.0; 77 static assets read, no upload performed.
-- Output checks — 2 public article routes, 2 RSS items, draft/future fixture content absent from public output, no comments placeholder, no taxonomy/list/search Pagefind duplicates, staging noindex/robots behavior verified, and `SITE_URL` override verified across canonical/OG/RSS/sitemap/robots/JSON-LD.
+- Output checks — 2 public article routes, 2 RSS items, draft/future fixture content absent from public output, no comments placeholder, no taxonomy/list/search Pagefind duplicates, staging noindex/robots behavior verified, and `SITE_URL` override verified across canonical/OG/RSS/sitemap-index/sitemap/robots/JSON-LD.
 
 ## Next Recommended Task
 

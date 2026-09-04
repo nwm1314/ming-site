@@ -22,7 +22,8 @@
     "test": "pnpm test:unit && pnpm test:e2e",
     "test:unit": "playwright test tests/unit --config=playwright.unit.config.ts",
     "test:e2e": "playwright test tests/e2e",
-    "test:e2e:ui": "playwright test tests/e2e --ui"
+    "test:e2e:ui": "playwright test tests/e2e --ui",
+    "test:cf": "node scripts/test-cloudflare-routing.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.0",
