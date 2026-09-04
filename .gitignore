@@ -12,3 +12,5 @@ Thumbs.db
 pnpm-debug.log*
 output/
 .playwright-cli/
+test-results/
+playwright-report/

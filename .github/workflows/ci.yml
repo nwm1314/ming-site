@@ -1,0 +1,45 @@
+name: Quality gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type and content check
+        run: pnpm check
+
+      - name: Build Astro site and Pagefind index
+        run: pnpm build
+
+      - name: Install Chromium for smoke tests
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run automated smoke tests
+        run: pnpm test
