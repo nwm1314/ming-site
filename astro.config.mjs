@@ -9,7 +9,7 @@ import { site } from './src/config/site';
 export default defineConfig({
   site: site.siteUrl,
   trailingSlash: 'ignore',
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [react(), mdx(), sitemap({ filter: (page) => !page.endsWith('/search/') })],
   vite: {
     plugins: [tailwindcss()],
   },
