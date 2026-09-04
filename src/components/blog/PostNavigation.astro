@@ -9,7 +9,7 @@ interface Props {
 const { previous, next } = Astro.props;
 ---
 
-<nav class="post-navigation" aria-label="Post navigation">
+<nav class="post-navigation" aria-label="Post navigation" data-pagefind-ignore>
   <div class="post-navigation-item">
     {previous ? (
       <a href={`/blog/${previous.id}`}>

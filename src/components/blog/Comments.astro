@@ -1,0 +1,17 @@
+---
+import { commentsProvider } from '../../lib/comments';
+
+interface Props {
+  enabled: boolean;
+  postId: string;
+}
+
+const { enabled, postId } = Astro.props;
+const provider = enabled ? commentsProvider : undefined;
+---
+
+{provider && (
+  <section class="comments-boundary" aria-label="Comments" data-comments-boundary data-pagefind-ignore>
+    <div data-comments-provider={provider} data-post-id={postId}></div>
+  </section>
+)}

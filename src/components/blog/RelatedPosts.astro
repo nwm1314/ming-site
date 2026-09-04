@@ -9,7 +9,7 @@ const { posts } = Astro.props;
 ---
 
 {posts.length > 0 && (
-  <section class="related-posts" aria-labelledby="related-posts-title">
+  <section class="related-posts" aria-labelledby="related-posts-title" data-pagefind-ignore>
     <div class="section-heading-row">
       <div><p class="eyebrow">/ keep exploring</p><h2 id="related-posts-title">Related <em>notes</em>.</h2></div>
     </div>

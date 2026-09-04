@@ -8,7 +8,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <Header />
   <main id="main-content" class="content-page search-page" data-pagefind-ignore>
     <div class="page-intro"><p class="eyebrow">/ search the notebook</p><h1>Search<span class="hero-punctuation">.</span></h1><p>在公开文章中寻找关键词、工具名或一个还记得的句子。</p></div>
-    <form class="search-form" data-search-form role="search">
+    <form class="search-form" data-search-form role="search" action="/search" method="get">
       <label for="search-input">Search posts</label>
       <div class="search-input-row">
         <input id="search-input" name="q" type="search" placeholder="Try Astro, 网络，或者工作流" autocomplete="off" autofocus />
@@ -16,7 +16,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </form>
     <p class="search-status" data-search-status aria-live="polite">输入关键词开始搜索。</p>
-    <div class="search-results" data-search-results></div>
+    <div class="search-results" id="search-results" data-search-results aria-live="polite"></div>
   </main>
   <Footer />
 </BaseLayout>
@@ -46,6 +46,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     if (status) status.textContent = message;
   }
 
+  function setLoading(isLoading: boolean) {
+    if (results) results.setAttribute('aria-busy', String(isLoading));
+  }
+
   async function loadPagefind() {
     if (pagefind) return pagefind;
     // Pagefind is generated into dist after Astro builds the site.
@@ -59,12 +63,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const query = term.trim();
     if (!results) return;
     results.replaceChildren();
+    setLoading(false);
     if (!query) {
       setStatus('输入关键词开始搜索。');
       return;
     }
 
     setStatus('正在翻开笔记……');
+    setLoading(true);
     try {
       const search = await loadPagefind();
       const response = await search.search(query);
@@ -84,12 +90,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         const title = document.createElement('strong');
         title.textContent = result.meta?.title ?? result.url;
         const excerpt = document.createElement('span');
+        // Pagefind documents excerpt as entity-encoded HTML with controlled <mark> tags.
         excerpt.innerHTML = result.excerpt;
         link.append(title, excerpt);
         results.append(link);
       }
     } catch {
       setStatus('搜索索引暂时不可用，但网站其他内容仍可正常浏览。');
+    } finally {
+      setLoading(false);
     }
   }
 

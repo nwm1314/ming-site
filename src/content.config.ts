@@ -4,21 +4,32 @@ import { z } from 'astro/zod';
 
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    publishDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    draft: z.boolean().default(false),
-    category: z.string().default('Notes'),
-    tags: z.array(z.string()).default([]),
-    featured: z.boolean().default(false),
-    cover: z.string().optional(),
-    toc: z.boolean().default(true),
-    comments: z.boolean().default(false),
-    canonical: z.url().optional(),
-    series: z.string().optional(),
-  }),
+  schema: z
+    .object({
+      title: z.string(),
+      description: z.string(),
+      publishDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
+      draft: z.boolean().default(false),
+      category: z.string().default('Notes'),
+      tags: z.array(z.string()).default([]),
+      featured: z.boolean().default(false),
+      cover: z.string().optional(),
+      coverAlt: z.string().trim().min(1).optional(),
+      toc: z.boolean().default(true),
+      comments: z.boolean().default(false),
+      canonical: z.url().optional(),
+      series: z.string().optional(),
+    })
+    .superRefine((post, context) => {
+      if (post.cover && !post.coverAlt) {
+        context.addIssue({
+          code: 'custom',
+          path: ['coverAlt'],
+          message: 'coverAlt is required when cover is set.',
+        });
+      }
+    }),
 });
 
 const projects = defineCollection({
