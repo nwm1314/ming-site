@@ -1,0 +1,9 @@
+{
+  "name": "Ming — personal digital space",
+  "short_name": "Ming",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f1e8",
+  "theme_color": "#d7f36b",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

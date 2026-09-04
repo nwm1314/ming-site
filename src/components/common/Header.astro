@@ -1,0 +1,75 @@
+---
+import { navigation } from '../../config/navigation';
+import { site } from '../../config/site';
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label={`${site.siteName} home`}>
+      <span class="brand-mark">m</span>
+      <span class="brand-word">ming<span class="brand-dot">.</span></span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      {navigation.map((item) => (
+        <a class:list={{ 'nav-link': true, active: currentPath === item.href }} href={item.href}>
+          <span aria-hidden="true">{item.icon}</span>{item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-github" href="https://github.com/nwm1314/ming-site" target="_blank" rel="noreferrer">
+        <span class="github-dot" aria-hidden="true"></span>
+        GitHub
+      </a>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Change color theme">
+        <span data-theme-icon aria-hidden="true">◐</span>
+        <span data-theme-label>System</span>
+      </button>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu">
+        <span class="sr-only">Open menu</span>
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" id="mobile-menu" data-mobile-menu aria-label="Mobile navigation" hidden>
+    {navigation.map((item) => <a href={item.href}>{item.label}<span aria-hidden="true">{item.icon}</span></a>)}
+  </nav>
+</header>
+
+<script>
+  const root = document.documentElement;
+  const themeButton = document.querySelector('[data-theme-toggle]');
+  const themeLabel = document.querySelector('[data-theme-label]');
+  const themeIcon = document.querySelector('[data-theme-icon]');
+  const menuButton = document.querySelector('[data-menu-toggle]');
+  const mobileMenu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+  const themes: Array<'system' | 'light' | 'dark'> = ['system', 'light', 'dark'];
+
+  function setTheme(theme: 'system' | 'light' | 'dark') {
+    root.dataset.theme = theme;
+    if (theme === 'system') localStorage.removeItem('ming-theme');
+    else localStorage.setItem('ming-theme', theme);
+    if (themeLabel) themeLabel.textContent = theme[0].toUpperCase() + theme.slice(1);
+    if (themeIcon) themeIcon.textContent = theme === 'light' ? '☼' : theme === 'dark' ? '☾' : '◐';
+  }
+
+  const savedTheme = localStorage.getItem('ming-theme');
+  setTheme(savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'system');
+
+  themeButton?.addEventListener('click', () => {
+    const currentTheme = themes.find((theme) => theme === root.dataset.theme) ?? 'system';
+    const nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+    setTheme(nextTheme);
+  });
+
+  menuButton?.addEventListener('click', () => {
+    const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+    menuButton.setAttribute('aria-expanded', String(!isOpen));
+    if (mobileMenu) mobileMenu.hidden = isOpen;
+  });
+</script>

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+.wrangler/
+.env
+.env.*
+!.env.example
+.obsidian/
+.DS_Store
+Thumbs.db
+pnpm-debug.log*
+output/
+.playwright-cli/

@@ -1,0 +1,24 @@
+---
+import { exploreLinks } from '../../config/navigation';
+import { site } from '../../config/site';
+import { socialLinks } from '../../config/social';
+---
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div>
+      <p class="eyebrow">keep a tab open</p>
+      <h2>还有东西在路上。</h2>
+    </div>
+    <p class="footer-note">一个轻量、诚实、慢慢更新的个人角落。<br />下次见，希望这里又多了一点新东西。</p>
+  </div>
+  <div class="footer-bottom">
+    <span>© {new Date().getFullYear()} {site.author}</span>
+    <nav aria-label="Footer navigation">
+      {exploreLinks.slice(0, 4).map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+    <div class="footer-socials">
+      {socialLinks.map((social) => <a href={social.href} target={social.href.startsWith('http') ? '_blank' : undefined} rel={social.href.startsWith('http') ? 'noreferrer' : undefined}>{social.short}</a>)}
+    </div>
+  </div>
+</footer>
