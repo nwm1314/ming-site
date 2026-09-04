@@ -23,7 +23,7 @@ const { term, posts } = Astro.props;
   canonical={`${site.siteUrl}/blog/tag/${encodeURIComponent(term.slug)}`}
 >
   <Header />
-  <main id="main-content" class="content-page" data-pagefind-body>
+  <main id="main-content" class="content-page">
     <div class="page-intro"><p class="eyebrow">/ tag</p><h1>#{term.displayName}<span class="hero-punctuation">.</span></h1><p>{posts.length} 篇公开文章，按发布时间倒序排列。</p></div>
     <PostList posts={posts} />
   </main>

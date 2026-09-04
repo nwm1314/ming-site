@@ -10,7 +10,7 @@ const terms = getTaxonomyTerms(await getPublicPosts(), 'tag');
 
 <BaseLayout title="Tags — Blog — Ming" description="按标签浏览 Ming 的公开文章。">
   <Header />
-  <main id="main-content" class="content-page" data-pagefind-body>
+  <main id="main-content" class="content-page">
     <div class="page-intro"><p class="eyebrow">/ blog index</p><h1>Tags<span class="hero-punctuation">.</span></h1><p>用标签把相邻的想法连在一起。</p></div>
     <TaxonomyOverview kind="tag" terms={terms} />
   </main>

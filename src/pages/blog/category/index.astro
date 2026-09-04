@@ -10,7 +10,7 @@ const terms = getTaxonomyTerms(await getPublicPosts(), 'category');
 
 <BaseLayout title="Categories — Blog — Ming" description="按分类浏览 Ming 的公开文章。">
   <Header />
-  <main id="main-content" class="content-page" data-pagefind-body>
+  <main id="main-content" class="content-page">
     <div class="page-intro"><p class="eyebrow">/ blog index</p><h1>Categories<span class="hero-punctuation">.</span></h1><p>从主题进入文章，保留可读的分类名称。</p></div>
     <TaxonomyOverview kind="category" terms={terms} />
   </main>

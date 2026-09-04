@@ -1,11 +1,13 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-import { getPostsForTaxonomy, isPublicPost } from './content/rules';
+import { getPostsForTaxonomy, getPageCount, isPublicPost, paginatePosts } from './content/rules';
 
 export * from './content/rules';
 
 export type PostEntry = CollectionEntry<'posts'>;
 export const BLOG_PAGE_SIZE = 8;
+
+export { getPageCount, paginatePosts };
 
 export async function getPublicPosts(now = new Date()) {
   const entries = await getCollection('posts', (post) => isPublicPost(post, now));

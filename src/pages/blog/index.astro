@@ -5,20 +5,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Pagination from '../../components/blog/Pagination.astro';
 import PostList from '../../components/blog/PostList.astro';
 import TaxonomyNav from '../../components/blog/TaxonomyNav.astro';
-import { BLOG_PAGE_SIZE, getPublicPosts, getTaxonomyTerms } from '../../lib/content';
+import { BLOG_PAGE_SIZE, getPageCount, getPublicPosts, paginatePosts, getTaxonomyTerms } from '../../lib/content';
 
 const posts = await getPublicPosts();
 const categories = getTaxonomyTerms(posts, 'category');
 const tags = getTaxonomyTerms(posts, 'tag');
-const totalPages = Math.ceil(posts.length / BLOG_PAGE_SIZE);
+const totalPages = getPageCount(posts.length, BLOG_PAGE_SIZE);
+const pagePosts = paginatePosts(posts, 1, BLOG_PAGE_SIZE).posts;
 ---
 
 <BaseLayout title="Blog — Ming" description="Ming 的技术笔记、实验记录与生活观察。">
   <Header />
-  <main id="main-content" class="content-page" data-pagefind-body>
+  <main id="main-content" class="content-page">
     <div class="page-intro"><p class="eyebrow">/ notebook</p><h1>Blog<span class="hero-punctuation">.</span></h1><p>技术、工具、踩坑，以及一些还在发酵的想法。</p></div>
     <TaxonomyNav categories={categories} tags={tags} />
-    <PostList posts={posts.slice(0, BLOG_PAGE_SIZE)} />
+    <PostList posts={pagePosts} />
     <Pagination page={1} totalPages={totalPages} />
   </main>
   <Footer />
