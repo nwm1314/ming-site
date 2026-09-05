@@ -19,7 +19,7 @@ const profile = await getProfile();
       {exploreLinks.slice(0, 4).map((link) => <a href={link.href}>{link.label}</a>)}
     </nav>
     <div class="footer-socials">
-      {profile.data.contacts.github && <a href={profile.data.contacts.github} target="_blank" rel="noreferrer">GH</a>}
+      {profile.data.contacts.github && <a href={profile.data.contacts.github} target="_blank" rel="noopener noreferrer">GH</a>}
       {profile.data.contacts.email && <a href={`mailto:${profile.data.contacts.email}`}>Mail</a>}
     </div>
   </div>
