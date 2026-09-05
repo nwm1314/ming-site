@@ -53,7 +53,7 @@ The check expects `/`, `/blog`, an existing article, `/search`, `/rss.xml`, and 
 
 ## Final launch
 
-After replacing the remaining placeholders and reviewing the staging build, bind a custom domain from **Worker Settings → Domains & Routes → Add custom domain**. Set:
+After reviewing the staging build and confirming the real personal content, bind a custom domain from **Worker Settings → Domains & Routes → Add custom domain**. Set:
 
 ```text
 SITE_URL=https://your-final-domain.example

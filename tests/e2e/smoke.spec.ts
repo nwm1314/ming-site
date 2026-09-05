@@ -4,8 +4,42 @@ test('home and theme switch are usable', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Ming/);
   await expect(page.locator('h1')).toContainText('Ming');
+  await expect(page.locator('.hero-role')).toContainText('把好奇心做成能跑起来的东西');
+  await expect(page.locator('.avatar-card img')).toHaveAttribute('alt', 'Ming 的头像');
+  await expect(page.locator('a[href="https://github.com/nwm1314"]').first()).toBeVisible();
+  await expect(page.locator('body')).not.toContainText('hello@example.com');
+  await expect(page.locator('body')).not.toContainText('avatar coming soon');
   await page.locator('[data-theme-toggle]').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+});
+
+test('homepage shows the real featured projects and now content', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.project-card')).toHaveCount(2);
+  await expect(page.locator('.project-card').nth(0)).toContainText('智能保险推荐引擎');
+  await expect(page.locator('.project-card').nth(1)).toContainText('赛博命理');
+  await expect(page.locator('.now-item')).toHaveCount(3);
+  await expect(page.locator('.now-board')).toContainText('个人 VPS 运维面板');
+  await expect(page.locator('.now-board')).toContainText('金融投资、AI');
+});
+
+test('about exposes configured identity and contact links', async ({ page }) => {
+  await page.goto('/about');
+  await expect(page.locator('h1')).toContainText('About');
+  await expect(page.locator('.about-large')).toContainText('Hi，我是 Ming');
+  await expect(page.locator('.about-page a[href="mailto:416070520@qq.com"]')).toBeVisible();
+  await expect(page.locator('a[href="https://github.com/nwm1314"]').first()).toBeVisible();
+  await expect(page.locator('.about-notes')).toContainText('AI & Agents');
+});
+
+test('project detail exposes the verified source and demo links', async ({ page }) => {
+  await page.goto('/projects/insurance-recommendation');
+  await expect(page.locator('h1')).toContainText('智能保险推荐引擎');
+  await expect(page.locator('a[href="https://github.com/nwm1314/insurance-recommendation"]')).toContainText('Source');
+  await expect(page.locator('a[href="https://insurance.nwmnow.com/"]')).toContainText('Live Demo');
+
+  await page.goto('/projects/cyber-divination');
+  await expect(page.locator('a[href="http://bazi.nwmnow.com/"]')).toContainText('Live Demo');
 });
 
 test('mobile menu opens and exposes navigation', async ({ page }) => {
