@@ -208,11 +208,11 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: -0.0
 
 .content-page, .article-page { max-width: 1240px; min-height: 60vh; margin: 0 auto; padding: 92px 32px 120px; }
 .page-intro { max-width: 750px; margin-bottom: 72px; }
-.page-intro h1 { margin-bottom: 18px; font-size: clamp(5rem, 12vw, 9rem); line-height: 0.8; }
+.page-intro h1 { margin-bottom: 22px; font-size: clamp(5rem, 12vw, 9rem); line-height: 0.94; }
 .page-intro > p:last-child { max-width: 470px; color: var(--ink-soft); font-size: 1.08rem; }
 .compact-intro { margin-bottom: 0; padding: 0 max(32px, calc((100vw - 1176px) / 2)); }
 .content-page > .now-section { max-width: none; padding-left: 0; padding-right: 0; }
-.page-project-grid { color: var(--ink); }
+.page-project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); color: var(--ink); }
 .page-project-grid .project-card { border-color: var(--ink); }
 .page-post-list { max-width: none; }
 .article-page article { max-width: 820px; margin: 0 auto; }

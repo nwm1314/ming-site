@@ -4,6 +4,8 @@ test('home and theme switch are usable', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Ming/);
   await expect(page.locator('h1')).toContainText('Ming');
+  await expect(page.locator('.brand-mark')).toHaveText('M');
+  await expect(page.locator('.brand-word')).toHaveText('Ming.');
   await expect(page.locator('.hero-role')).toContainText('把好奇心做成能跑起来的东西');
   await expect(page.locator('.avatar-card img')).toHaveAttribute('alt', 'Ming 的头像');
   await expect(page.locator('a[href="https://github.com/nwm1314"]').first()).toBeVisible();
@@ -40,6 +42,26 @@ test('project detail exposes the verified source and demo links', async ({ page 
 
   await page.goto('/projects/cyber-divination');
   await expect(page.locator('a[href="http://bazi.nwmnow.com/"]')).toContainText('Live Demo');
+});
+
+test('Blog and Projects intros keep headings clear of their descriptions', async ({ page }) => {
+  for (const route of ['/blog', '/projects']) {
+    await page.goto(route);
+    const headingBox = await page.locator('.page-intro h1').boundingBox();
+    const descriptionBox = await page.locator('.page-intro > p:last-child').boundingBox();
+    expect(headingBox).not.toBeNull();
+    expect(descriptionBox).not.toBeNull();
+    expect(descriptionBox?.y ?? 0).toBeGreaterThan((headingBox?.y ?? 0) + (headingBox?.height ?? 0));
+  }
+
+  await page.goto('/projects');
+  const cards = page.locator('.page-project-grid .project-card');
+  await expect(cards).toHaveCount(3);
+  const firstCard = await cards.nth(0).boundingBox();
+  const secondCard = await cards.nth(1).boundingBox();
+  expect(firstCard).not.toBeNull();
+  expect(secondCard).not.toBeNull();
+  expect(Math.abs((firstCard?.width ?? 0) - (secondCard?.width ?? 0))).toBeLessThan(2);
 });
 
 test('mobile menu opens and exposes navigation', async ({ page }) => {

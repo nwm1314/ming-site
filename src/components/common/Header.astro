@@ -10,8 +10,8 @@ const profile = await getProfile();
 <header class="site-header" data-pagefind-ignore>
   <div class="header-inner">
     <a class="brand" href="/" aria-label={`${profile.data.displayName} home`}>
-      <span class="brand-mark">m</span>
-      <span class="brand-word">ming<span class="brand-dot">.</span></span>
+      <span class="brand-mark">{profile.data.displayName.slice(0, 1)}</span>
+      <span class="brand-word">{profile.data.displayName}<span class="brand-dot">.</span></span>
     </a>
 
     <nav class="desktop-nav" aria-label="Primary navigation">
