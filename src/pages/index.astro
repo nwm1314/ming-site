@@ -9,10 +9,12 @@ import LatestPosts from '../components/home/LatestPosts.astro';
 import MomentPreview from '../components/home/MomentPreview.astro';
 import NowPanel from '../components/home/NowPanel.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { site } from '../config/site';
+import { getProfile } from '../lib/content';
+
+const profile = await getProfile();
 ---
 
-<BaseLayout title={site.title} description={site.description}>
+<BaseLayout title={profile.data.seo.title} description={profile.data.seo.description}>
   <Header />
   <main id="main-content">
     <Hero />

@@ -9,6 +9,20 @@ export const BLOG_PAGE_SIZE = 8;
 
 export { getPageCount, paginatePosts };
 
+export async function getProfile() {
+  const profiles = await getCollection('profile');
+  const profile = profiles[0];
+  if (!profile) throw new Error('The profile content entry is missing.');
+  return profile;
+}
+
+export async function getCurrentNow() {
+  const entries = await getCollection('now');
+  const current = entries[0];
+  if (!current) throw new Error('The current now content entry is missing.');
+  return current;
+}
+
 export async function getPublicPosts(now = new Date()) {
   const entries = await getCollection('posts', (post) => isPublicPost(post, now));
   return entries.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
@@ -35,4 +49,12 @@ export function formatDate(date: Date, options: Intl.DateTimeFormatOptions = {})
     day: 'numeric',
     ...options,
   }).format(date);
+}
+
+export function formatDotDate(date: Date) {
+  return new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date).replaceAll('-', '.');
 }

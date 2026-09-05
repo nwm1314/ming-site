@@ -2,14 +2,15 @@ import rss from '@astrojs/rss';
 import type { APIRoute } from 'astro';
 
 import { site } from '../config/site';
-import { getPublicPosts } from '../lib/content';
+import { getProfile, getPublicPosts } from '../lib/content';
 
 export const GET: APIRoute = async () => {
   const posts = await getPublicPosts();
+  const profile = await getProfile();
 
   return rss({
-    title: site.title,
-    description: site.description,
+    title: profile.data.seo.title,
+    description: profile.data.seo.description,
     site: site.siteUrl,
     trailingSlash: false,
     customData: '<language>zh-CN</language>',

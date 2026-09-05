@@ -1,5 +1,7 @@
 ---
-import { site } from '../../config/site';
+import { formatDotDate, getCurrentNow } from '../../lib/content';
+
+const now = await getCurrentNow();
 ---
 
 <section class="now-section section-pad" id="now">
@@ -12,22 +14,16 @@ import { site } from '../../config/site';
   <div class="now-board reveal-up" style="--delay: 100ms">
     <div class="now-board-top">
       <span class="board-label">CURRENT STATUS</span>
-      <span class="board-date">updated {site.now.updatedAt}</span>
+      <span class="board-date">updated {formatDotDate(now.data.updatedAt)}</span>
     </div>
     <div class="now-items">
-      <div class="now-item now-item-main">
-        <span class="now-index">01</span>
-        <div><span class="now-kicker">currently building</span><strong>{site.now.building}</strong></div>
-        <span class="now-scribble" aria-hidden="true">✎</span>
-      </div>
-      <div class="now-item">
-        <span class="now-index">02</span>
-        <div><span class="now-kicker">exploring</span><strong>{site.now.exploring}</strong></div>
-      </div>
-      <div class="now-item">
-        <span class="now-index">03</span>
-        <div><span class="now-kicker">learning</span><strong>{site.now.learning}</strong></div>
-      </div>
+      {now.data.items.map((item, index) => (
+        <div class:list={{ 'now-item': true, 'now-item-main': index === 0 }}>
+          <span class="now-index">{String(index + 1).padStart(2, '0')}</span>
+          <div><span class="now-kicker">{item.label}</span><strong>{item.text}</strong></div>
+          {index === 0 && <span class="now-scribble" aria-hidden="true">✎</span>}
+        </div>
+      ))}
     </div>
   </div>
 </section>

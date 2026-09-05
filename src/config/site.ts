@@ -24,29 +24,6 @@ const buildIsIndexable =
 export const site = {
   siteUrl: buildSiteUrl,
   indexable: buildIsIndexable,
-  siteName: 'Ming',
-  title: 'Ming — curious things, carefully made',
-  description:
-    '一个有生活感、有技术味、可长期生长的个人数字空间。记录正在构建的东西，也记录路上遇见的风。',
-  author: 'Ming',
-  avatar: {
-    src: '',
-    alt: 'Ming 的字母标记',
-    fallback: 'M',
-  },
-  hero: {
-    eyebrow: 'personal digital space · 01',
-    name: 'Ming',
-    role: '把好奇心做成可以打开的东西。',
-    bio: '在代码、网络和一点点生活观察之间来回切换。这里是我的工作台：放项目，也放还没想明白的念头。',
-    status: 'currently building ming-site',
-  },
-  now: {
-    building: 'ming-site / 一个会慢慢长大的个人主页',
-    exploring: 'AI coding、轻量自动化，还有更好的个人工作流',
-    learning: '如何把复杂的东西讲得像一张清楚的便签',
-    updatedAt: '2026.09.04',
-  },
   defaults: {
     theme: 'system' as const,
     ogImage: '/favicon.svg',

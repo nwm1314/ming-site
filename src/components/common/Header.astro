@@ -1,14 +1,15 @@
 ---
 import { navigation } from '../../config/navigation';
-import { site } from '../../config/site';
+import { getProfile } from '../../lib/content';
 import { isNavigationActive } from '../../lib/navigation';
 
 const currentPath = Astro.url.pathname;
+const profile = await getProfile();
 ---
 
 <header class="site-header" data-pagefind-ignore>
   <div class="header-inner">
-    <a class="brand" href="/" aria-label={`${site.siteName} home`}>
+    <a class="brand" href="/" aria-label={`${profile.data.displayName} home`}>
       <span class="brand-mark">m</span>
       <span class="brand-word">ming<span class="brand-dot">.</span></span>
     </a>
@@ -22,10 +23,10 @@ const currentPath = Astro.url.pathname;
     </nav>
 
     <div class="header-actions">
-      <a class="header-github" href="https://github.com/nwm1314/ming-site" target="_blank" rel="noreferrer">
+      {profile.data.contacts.github && <a class="header-github" href={profile.data.contacts.github} target="_blank" rel="noreferrer">
         <span class="github-dot" aria-hidden="true"></span>
         GitHub
-      </a>
+      </a>}
       <a class="header-search" href="/search">Search</a>
       <button class="theme-toggle" type="button" data-theme-toggle aria-label="Change color theme">
         <span data-theme-icon aria-hidden="true">◐</span>
