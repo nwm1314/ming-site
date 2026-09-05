@@ -61,6 +61,10 @@ export function isPublicPost(post: Pick<PublicPostLike, 'data'>, now = new Date(
   return !post.data.draft && post.data.publishDate.valueOf() <= now.valueOf();
 }
 
+export function isPublicMoment(moment: { data: { visibility: 'public' | 'unlisted' } }) {
+  return moment.data.visibility === 'public';
+}
+
 export function getPageCount(totalItems: number, pageSize: number) {
   if (!Number.isInteger(pageSize) || pageSize < 1) {
     throw new RangeError('pageSize must be a positive integer');

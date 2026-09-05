@@ -31,16 +31,21 @@ singletons:
         label: 显示名称
         widget: string
         default: Ming
+        required: true
+        readonly: true
         hint: 公开身份统一使用 Ming，不要填写真实姓名。
       - name: tagline
         label: 首页一句话
         widget: text
+        required: true
       - name: bio
         label: 首页简介
         widget: text
+        required: true
       - name: status
         label: 当前状态
         widget: string
+        required: true
       - name: avatar
         label: 头像
         widget: object
@@ -54,15 +59,18 @@ singletons:
           - name: alt
             label: 头像替代文字
             widget: string
+            required: true
           - name: width
             label: 图片宽度
             widget: number
             default: 960
+            required: true
             readonly: true
           - name: height
             label: 图片高度
             widget: number
             default: 960
+            required: true
             readonly: true
           - name: fallback
             label: 无图片时的标记
@@ -104,6 +112,7 @@ singletons:
       - name: aboutIntro
         label: About 介绍
         widget: text
+        required: true
       - name: care
         label: 我关注的事情
         widget: list
@@ -112,9 +121,11 @@ singletons:
           - name: title
             label: 标题
             widget: string
+            required: true
           - name: description
             label: 描述
             widget: text
+            required: true
       - name: seo
         label: 搜索与分享信息
         widget: object
@@ -122,9 +133,11 @@ singletons:
           - name: title
             label: 页面标题
             widget: string
+            required: true
           - name: description
             label: 页面描述
             widget: text
+            required: true
 
   - name: now
     label: 现在 / Now
@@ -138,6 +151,7 @@ singletons:
         widget: datetime
         type: date
         format: YYYY-MM-DD
+        required: true
       - name: building
         label: Building / 正在构建
         widget: object
@@ -145,9 +159,11 @@ singletons:
           - name: label
             label: 小标题
             widget: string
+            required: true
           - name: text
             label: 内容
             widget: text
+            required: true
       - name: exploring
         label: Exploring / 正在探索
         widget: object
@@ -155,9 +171,11 @@ singletons:
           - name: label
             label: 小标题
             widget: string
+            required: true
           - name: text
             label: 内容
             widget: text
+            required: true
       - name: learning
         label: Learning / 正在学习
         widget: object
@@ -165,9 +183,11 @@ singletons:
           - name: label
             label: 小标题
             widget: string
+            required: true
           - name: text
             label: 内容
             widget: text
+            required: true
 
 collections:
   - name: posts
@@ -183,15 +203,18 @@ collections:
       - name: title
         label: 标题
         widget: string
+        required: true
       - name: description
         label: 摘要
         widget: text
+        required: true
       - name: publishDate
         label: 发布日期
         widget: datetime
         type: date
         format: YYYY-MM-DD
         default: '{{now}}'
+        required: true
       - name: updatedDate
         label: 更新日期
         widget: datetime
@@ -207,12 +230,14 @@ collections:
         label: 分类
         widget: string
         default: Notes
+        required: true
       - name: tags
         label: 标签
         widget: list
         label_singular: 标签
         required: false
         default: []
+        hint: 不要添加空标签；没有标签时保持为空。
       - name: cover
         label: 封面图片
         widget: image
@@ -221,7 +246,7 @@ collections:
         label: 封面替代文字
         widget: string
         required: false
-        hint: 填写封面后请同时填写图片替代文字。
+        hint: 填写封面后必须同时填写图片替代文字；普通图片请控制在 20 MiB 以内。
       - name: featured
         label: 首页精选
         widget: boolean
@@ -243,6 +268,7 @@ collections:
         widget: string
         type: url
         required: false
+        hint: 仅在文章有明确的规范地址时填写完整 http(s) URL。
       - name: body
         label: 正文
         widget: markdown
@@ -260,9 +286,11 @@ collections:
       - name: title
         label: 名称
         widget: string
+        required: true
       - name: summary
         label: 一句话简介
         widget: text
+        required: true
       - name: description
         label: 项目描述
         widget: text
@@ -270,6 +298,7 @@ collections:
       - name: status
         label: 状态
         widget: select
+        required: true
         options:
           - { label: 想法, value: idea }
           - { label: 构建中, value: building }
@@ -325,6 +354,8 @@ collections:
         label: 显示顺序
         widget: number
         default: 0
+        min: 0
+        hint: 精选项目使用不重复的非负顺序值。
       - name: body
         label: 项目详情
         widget: markdown
@@ -341,9 +372,11 @@ collections:
       - name: name
         label: 名称
         widget: string
+        required: true
       - name: category
         label: 分类
         widget: select
+        required: true
         options:
           - Infrastructure
           - Network
@@ -355,6 +388,7 @@ collections:
       - name: description
         label: 我正在使用它做什么
         widget: text
+        required: true
       - name: url
         label: 链接
         widget: string
@@ -386,6 +420,7 @@ collections:
         widget: datetime
         type: datetime-local
         default: '{{now}}'
+        required: true
       - name: tags
         label: 标签
         widget: list
@@ -423,12 +458,17 @@ collections:
       - name: title
         label: 图片标题
         widget: string
+        required: true
       - name: image
         label: 图片
         widget: image
+        required: true
+        hint: 普通图片请控制在 20 MiB 以内；头像和默认分享图有单独阈值。
       - name: alt
         label: 图片替代文字
         widget: string
+        required: true
+        hint: 描述图片实际内容，不要留空。
       - name: album
         label: 相册分类
         widget: string
@@ -461,9 +501,11 @@ collections:
         widget: datetime
         type: date
         format: YYYY-MM-DD
+        required: true
       - name: title
         label: 标题
         widget: string
+        required: true
       - name: type
         label: 类型
         widget: string
@@ -471,6 +513,7 @@ collections:
       - name: description
         label: 描述
         widget: text
+        required: true
       - name: link
         label: 相关链接
         widget: string

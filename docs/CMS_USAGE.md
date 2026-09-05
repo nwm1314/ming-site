@@ -22,6 +22,8 @@
 
 文章的 `publishDate` 不能晚于构建时间，否则也不会进入公开列表。
 
+需要离线起草时，也可以复制 `templates/content/post.md`、`moment.md` 或 `project.md`。模板不属于生产内容；复制模板后，必须填完所有 required fields，并通过内容校验后，才能放入 `src/content/` 等 production content。命令行还提供 `pnpm new:post` 和 `pnpm new:moment`：Post 会询问 Title、Description、Slug、Date，Moment 只询问 Slug、Date，并拒绝覆盖已有文件。
+
 ## 修改项目、工具和其他内容
 
 - **项目**：使用状态下拉选项，不要自己拼写状态值。
@@ -33,6 +35,10 @@
 ## 上传图片
 
 在图片字段或媒体库选择上传。图片会提交到仓库的 `public/uploads/`，之后由 Cloudflare Static Assets 发布。头像推荐正方形 WebP，建议不超过 500 KB；不要直接上传几 MB 的原图。
+
+仓库会运行确定性的媒体大小检查：普通图片超过 5 MiB 会给出警告，超过 20 MiB 会让质量检查失败；站点头像有明确的 2 MiB 警告 / 5 MiB 失败阈值，默认 OG 图有单独的显式策略。检查只报告，不会压缩或修改上传文件。若 CI 报错，按错误信息中的完整路径处理后再提交。
+
+文章封面必须同时填写 `coverAlt`；相册图片必须填写 `alt`。这些字段与 Astro schema 同步校验，避免发布后才发现无替代文字。
 
 ## 构建失败怎么办
 

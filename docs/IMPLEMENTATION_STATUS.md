@@ -2,7 +2,17 @@
 
 ## Current Phase
 
-Phase 4B — Production Launch Readiness
+Phase 4C — Post-launch Hardening + Editorial Tooling
+
+## Production
+
+- Production: https://nwmnow.com
+- Custom Domain active.
+- `SITE_URL=https://nwmnow.com`.
+- `SITE_INDEXABLE=true`.
+- Google Search Console connected; sitemap submitted successfully.
+- Bing Webmaster Tools connected; sitemap processing.
+- Sveltia CMS production workflow verified.
 
 ## Completed
 
@@ -65,8 +75,8 @@ Phase 4B — Production Launch Readiness
 
 - Target: Cloudflare Workers + Static Assets, Worker name `ming-site`, assets directory `./dist`.
 - GitHub repository: `nwm1314/ming-site`; production branch `main`; preview branches `feature/*`.
-- PR #1 is merged into `main`; the release gate is complete and the next environment step is Cloudflare staging deployment.
-- Workers Builds commands are documented in `docs/DEPLOYMENT.md`; production deploy is deliberately not run by Codex.
+- PR #1 is merged into `main`; the production custom domain is active.
+- Workers Builds commands are documented in `docs/DEPLOYMENT.md`; production deploy remains an owner-controlled Cloudflare operation.
 
 ## Test Fixture Strategy
 
@@ -83,17 +93,19 @@ Phase 4B — Production Launch Readiness
 ## Deployment Strategy
 
 - Staging defaults to `SITE_INDEXABLE=false`, emits `noindex, nofollow`, and serves `robots.txt` with `Disallow: /`.
-- Final launch only needs `SITE_URL` set to the custom domain and `SITE_INDEXABLE=true` in Workers Builds variables after content and visual review.
-- Local commands: `pnpm dev`, `pnpm preview`, `pnpm cf:preview`, `pnpm cf:dry-run`, `pnpm test:cf`, and `pnpm deploy`.
+- Production is live at `https://nwmnow.com` with the custom domain and `SITE_INDEXABLE=true` configured in Cloudflare Workers Builds.
+- Local commands: `pnpm dev`, `pnpm preview`, `pnpm cf:preview`, `pnpm cf:dry-run`, `pnpm test:cf`, `pnpm test:links`, `pnpm test:media`, and `pnpm deploy`.
 
 ## Known Issues
 
 - Moments and Gallery currently render empty collections by design; no placeholder entries are published until real material is available.
 - Pagefind does not stem Chinese terms; exact/substring search remains available.
 - No comments provider is connected by design.
-- Real GitHub read/write authentication and Android save/commit/build acceptance still require the owner’s token and Cloudflare Preview environment; they are intentionally not automated in CI.
+- Sveltia production editing is verified through the owner-only GitHub Token flow; Android save/commit/build acceptance is not automated in CI.
 - The empty Moments and Gallery collections produce the existing Astro glob/empty-collection build warnings until real content is added. No placeholder content was published to silence them.
 - `pnpm format` still reports historical formatting drift in 58 files outside this release task; it was not applied because it would create a broad, low-value diff. This does not block the release gate.
+- The external `http://bazi.nwmnow.com/` project demo still needs TLS before its link is changed to HTTPS.
+- HSTS and other edge security headers remain a Cloudflare configuration concern; this static site does not add a Worker runtime just to synthesize them.
 
 ## Verification
 
@@ -101,9 +113,9 @@ Phase 4B — Production Launch Readiness
 - `pnpm lint` — passed.
 - `pnpm check` — passed with 0 errors, 0 warnings, and 0 hints.
 - `pnpm build` — passed; 26 static pages generated and 2 Pagefind pages indexed.
-- `pnpm test:unit` — passed, 7 tests including pagination boundaries.
+- `pnpm test:unit` — passed, 8 tests including pagination and Moment visibility boundaries.
 - `pnpm test:e2e` — passed, 13 Chromium smoke tests including Ming identity, real projects, contact links, Now content, mobile menu, search, Blog, 404, staging robots, and `/admin`.
-- `pnpm test:privacy` — passed across 53 generated files; no legacy placeholder identity/content found.
+- `pnpm test:privacy` — passed across 54 generated files; no legacy placeholder identity/content found.
 - `pnpm test:cf` — passed under `wrangler dev --local`: public routes, `/admin`, `/admin/config.yml`, and the custom 404 response behaved as expected.
 - Phase 3A browser review — Playwright screenshots captured at 390×844 and 1440×900 in Light and Dark themes; overflow checks passed at 320, 390, 768, 1024, and 1440 widths; no Hero subtitle overlap, avatar crop issue, project-card overflow, or mobile horizontal scrolling observed.
 - `pnpm cf:dry-run` — passed with Wrangler 4.129.0; 85 static assets read, no upload performed.
@@ -167,6 +179,15 @@ Phase 4B — Production Launch Readiness
 
 - Added [LAUNCH_CHECKLIST.md](./LAUNCH_CHECKLIST.md) covering domain binding, Cloudflare variables, smoke checks, and the manual indexing switch.
 
-## Next Recommended Task
+## Phase 4C Release Audit
 
-Custom Domain Binding + Final Production Smoke
+- Updated this handoff to record the live custom-domain production state.
+- Added deterministic content quality validation for required editorial fields, URL fields, post cover/alt pairing, Gallery alt text, Profile identity, and unique featured project order.
+- Added `pnpm test:links` to validate root-relative and same-origin generated HTML references without requesting external URLs.
+- Added `pnpm test:media` with explicit ordinary-media, avatar, and default-OG size policies; it never edits or compresses files.
+- Added safe authoring templates under `templates/content/` and lightweight `pnpm new:post` / `pnpm new:moment` scaffolds that refuse overwrites.
+- Kept RSS autodiscovery and the existing `SITE_URL`-derived metadata path, with release invariants covering canonical, OG, Twitter, RSS, sitemap, indexability, and Pagefind boundaries.
+
+## Current Handoff
+
+Phase 4C is complete. Continue normal editorial maintenance through the CMS or Git-backed Markdown workflow; do not treat this release as a request to start another feature phase.

@@ -4,6 +4,7 @@ import {
   getAdjacentPosts,
   getPageCount,
   getRelatedPosts,
+  isPublicMoment,
   isPublicPost,
   paginatePosts,
   readingTime,
@@ -43,6 +44,11 @@ test.describe('content rules', () => {
     expect(isPublicPost(post('past'), now)).toBe(true);
     expect(isPublicPost(post('draft', { draft: true }), now)).toBe(false);
     expect(isPublicPost(post('future', { publishDate: new Date('2026-09-05T00:00:00Z') }), now)).toBe(false);
+  });
+
+  test('only marks explicitly public moments as public', () => {
+    expect(isPublicMoment({ data: { visibility: 'public' } })).toBe(true);
+    expect(isPublicMoment({ data: { visibility: 'unlisted' } })).toBe(false);
   });
 
   test('normalizes URL-safe ASCII and CJK taxonomy names', () => {
