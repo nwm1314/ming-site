@@ -36,6 +36,9 @@ jobs:
       - name: Build Astro site and Pagefind index
         run: pnpm build
 
+      - name: Run deterministic release smoke test
+        run: pnpm test:release
+
       - name: Run Cloudflare Static Assets routing smoke test
         run: pnpm test:cf
 

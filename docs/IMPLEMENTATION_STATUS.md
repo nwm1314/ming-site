@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 4A — Sveltia CMS + Content Editing Workflow
+Phase 4B — Production Launch Readiness
 
 ## Completed
 
@@ -50,7 +50,7 @@ Phase 4A — Sveltia CMS + Content Editing Workflow
 - Site URL and indexability are build-time configuration, not route-local checks. `SITE_URL` drives canonical, RSS, sitemap, robots, OG, and JSON-LD values.
 - GitHub Actions remains a quality gate. Cloudflare Workers Builds owns deployment and receives no production token from this repository.
 - Sveltia CMS is a static CDN application isolated under `/admin`; it is not imported by public Astro pages. The CMS uses the GitHub backend and commits Markdown/media directly to Git.
-- Phase 4A uses Sveltia’s Sign In with Token flow for the single editor. Tokens live only in browser storage during use; OAuth Authenticator remains a Phase 4B prerequisite.
+- Phase 4A uses Sveltia’s Sign In with Token flow for the single editor. Tokens live only in browser storage during use; OAuth remains intentionally deferred and is outside this launch-readiness release.
 - The CMS configuration is validated against the pinned release’s JSON schema by editor tooling and by a repository-local structural smoke test. No token, OAuth secret, `.env`, or credential fixture is present.
 - Static Assets are served first for every request. There is no Worker main script; unknown paths use `dist/404.html` with HTTP 404, and SPA fallback remains disabled.
 - `workers_dev` and Wrangler Preview URLs are explicitly enabled. Workers Builds uses `wrangler deploy` for `main` and `wrangler versions upload` for non-production branches.
@@ -111,6 +111,62 @@ Phase 4A — Sveltia CMS + Content Editing Workflow
 - `pnpm test:cms` — passed; YAML parsing, pinned Sveltia version, GitHub backend, singleton files, content folders, collection fields, safe defaults, explicit `getEntry` IDs, and optional Pagefind output checks passed.
 - Manual browser review — passed at desktop 1440×900 and mobile 390×844. Sveltia login UI loaded in Simplified Chinese, the token dialog opened without entering a token, and the browser console showed 0 errors / 0 warnings after reload.
 
+## Phase 4B Release Audit
+
+### Release Audit
+
+- Audited the public routes, generated assets, metadata, RSS, robots, sitemap, Pagefind scope, CMS shell, empty states, external links, and staging index boundary.
+- Retained `static-first.md`: it is a short, concrete public note about this site's real static-first architecture rather than a search or layout fixture. `draft-note.md` remains non-public.
+- Added deterministic `pnpm test:release` checks for staging and production indexing modes without external network access.
+
+### SEO
+
+- Homepage title remains `Ming — 把好奇心做成能跑起来的东西`.
+- Canonical, RSS, sitemap, robots, JSON-LD, Open Graph and Twitter image URLs continue to derive from the single `SITE_URL` value.
+- Search, 404 and admin remain `noindex, nofollow`; admin remains outside sitemap and Pagefind.
+
+### Social Sharing
+
+- Replaced the favicon fallback with `public/images/ming-og.webp`, a 1200×630 brand-level share image using the existing paper/grid/orbit visual language.
+- Added `summary_large_image`, image alt metadata, and article cover alt fallback. The OG asset is metadata-only and is not rendered by public page components.
+
+### Indexing Boundary
+
+- `SITE_INDEXABLE=false` remains the repository default and emits `noindex, nofollow` plus `Disallow: /`.
+- The release smoke test also verifies `SITE_INDEXABLE=true` emits `Allow: /` and the correct `SITE_URL` sitemap without changing the repository default.
+
+### RSS / Search
+
+- RSS contains only the two current public posts and uses `SITE_URL` for channel and item links.
+- Pagefind continues to index only public article detail bodies; draft, future, list, taxonomy, search and admin content are excluded.
+- Empty Moments and Gallery pages now show explicit non-fictional empty states.
+
+### CMS Safety
+
+- Sveltia remains pinned at `@sveltia/cms@0.205.4` with GitHub Token login; no OAuth, authenticator Worker or secret was added.
+- The CMS branch, singleton files, media folder and noindex markers remain unchanged and covered by existing validation.
+
+### Responsive / Accessibility
+
+- Kept the established responsive layout and reduced-motion behavior; tightened external `target="_blank"` links to `rel="noopener noreferrer"`.
+- Preserved keyboard-friendly mobile navigation, focus-visible styles, form labels, image dimensions and empty-state layouts.
+
+### Performance
+
+- Default OG image is not part of normal page markup; avatar dimensions remain explicit and Pagefind remains lazy-loaded from the Search page.
+- No new runtime, analytics, service worker, database or large dependency was introduced.
+
+### Known External Risks
+
+- `http://bazi.nwmnow.com/` is intentionally unchanged and is a release-experience risk until that service has TLS; change it to HTTPS only after the service is configured.
+- Security headers such as HSTS depend on the final HTTPS domain and Cloudflare configuration. The static-assets architecture does not add a Worker runtime just to synthesize headers; review the final Cloudflare response headers before public launch.
+- In a local browser check, Sveltia's optional Chinese translation request showed a non-blocking in-app fallback alert while the pinned CMS shell and token login controls remained usable; recheck the deployed staging URL before launch.
+- Moments and Gallery remain empty by design until real material is supplied.
+
+### Launch Checklist
+
+- Added [LAUNCH_CHECKLIST.md](./LAUNCH_CHECKLIST.md) covering domain binding, Cloudflare variables, smoke checks, and the manual indexing switch.
+
 ## Next Recommended Task
 
-Phase 4A owner acceptance on Android/Cloudflare Preview → review and merge the PR → Phase 4B OAuth Authenticator only after explicit approval.
+Custom Domain Binding + Final Production Smoke

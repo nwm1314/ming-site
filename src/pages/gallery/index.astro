@@ -8,5 +8,5 @@ const gallery = await getCollection('gallery');
 ---
 
 <BaseLayout title="Gallery — Ming" description="Ming 的图像角落。">
-  <Header /><main id="main-content" class="content-page"><div class="page-intro"><p class="eyebrow">/ visual notes</p><h1>Gallery<span class="hero-punctuation">.</span></h1><p>一些画面，先从工作台这一角开始。</p></div><div class="gallery-grid">{gallery.map((item) => <figure class="gallery-item"><img src={item.data.image} alt={item.data.alt} loading="lazy" /><figcaption><strong>{item.data.title}</strong><span>{item.data.album} · {item.data.location}</span></figcaption></figure>)}</div></main><Footer />
+  <Header /><main id="main-content" class="content-page"><div class="page-intro"><p class="eyebrow">/ visual notes</p><h1>Gallery<span class="hero-punctuation">.</span></h1><p>一些画面，先从工作台这一角开始。</p></div>{gallery.length > 0 ? <div class="gallery-grid">{gallery.map((item) => <figure class="gallery-item"><img src={item.data.image} alt={item.data.alt} loading="lazy" /><figcaption><strong>{item.data.title}</strong><span>{item.data.album} · {item.data.location}</span></figcaption></figure>)}</div> : <div class="empty-gallery"><div><span aria-hidden="true">✳</span><p>目前没有公开图像。</p></div></div>}</main><Footer />
 </BaseLayout>

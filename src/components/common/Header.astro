@@ -23,7 +23,7 @@ const profile = await getProfile();
     </nav>
 
     <div class="header-actions">
-      {profile.data.contacts.github && <a class="header-github" href={profile.data.contacts.github} target="_blank" rel="noreferrer">
+      {profile.data.contacts.github && <a class="header-github" href={profile.data.contacts.github} target="_blank" rel="noopener noreferrer">
         <span class="github-dot" aria-hidden="true"></span>
         GitHub
       </a>}

@@ -8,5 +8,5 @@ const moments = await getPublicMoments();
 ---
 
 <BaseLayout title="Moments — Ming" description="Ming 的小记录。">
-  <Header /><main id="main-content" class="content-page"><div class="page-intro"><p class="eyebrow">/ small moments</p><h1>Moments<span class="hero-punctuation">.</span></h1><p>短一点的记录，也值得留下来。</p></div><div class="moment-card moments-page-card">{moments.map((moment) => <article class="moment-entry"><div class="moment-date">{formatDate(moment.data.publishDate)}</div><div class="moment-body"><Fragment set:html={moment.body} /><div class="moment-tags">{moment.data.tags.map((tag) => <span>#{tag}</span>)}</div></div></article>)}</div></main><Footer />
+  <Header /><main id="main-content" class="content-page"><div class="page-intro"><p class="eyebrow">/ small moments</p><h1>Moments<span class="hero-punctuation">.</span></h1><p>短一点的记录，也值得留下来。</p></div>{moments.length > 0 ? <div class="moment-card moments-page-card">{moments.map((moment) => <article class="moment-entry"><div class="moment-date">{formatDate(moment.data.publishDate)}</div><div class="moment-body"><Fragment set:html={moment.body} /><div class="moment-tags">{moment.data.tags.map((tag) => <span>#{tag}</span>)}</div></div></article>)}</div> : <div class="empty-state">目前没有公开的小记录。</div>}</main><Footer />
 </BaseLayout>
