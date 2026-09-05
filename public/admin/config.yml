@@ -1,0 +1,478 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms@0.205.4/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: nwm1314/ming-site
+  branch: main
+  auth_scope: public_repo
+
+publish_mode: simple
+media_folder: public/uploads
+public_folder: /uploads
+app_title: Ming 内容后台
+show_preview_links: true
+
+output:
+  omit_empty_optional_fields: true
+  yaml:
+    indent_size: 2
+    indent_sequences: true
+    quote: none
+
+singletons:
+  - name: profile
+    label: 个人资料
+    icon: person
+    file: src/content/profile/ming.md
+    format: yaml-frontmatter
+    extension: md
+    fields:
+      - name: displayName
+        label: 显示名称
+        widget: string
+        default: Ming
+        hint: 公开身份统一使用 Ming，不要填写真实姓名。
+      - name: tagline
+        label: 首页一句话
+        widget: text
+      - name: bio
+        label: 首页简介
+        widget: text
+      - name: status
+        label: 当前状态
+        widget: string
+      - name: avatar
+        label: 头像
+        widget: object
+        fields:
+          - name: src
+            label: 头像图片
+            widget: image
+            required: false
+            accept: image/webp,image/png,image/jpeg
+            hint: 推荐正方形 WebP，建议不超过 500 KB。现有头像会继续保留。
+          - name: alt
+            label: 头像替代文字
+            widget: string
+          - name: width
+            label: 图片宽度
+            widget: number
+            default: 960
+            readonly: true
+          - name: height
+            label: 图片高度
+            widget: number
+            default: 960
+            readonly: true
+          - name: fallback
+            label: 无图片时的标记
+            widget: hidden
+            default: M
+      - name: contacts
+        label: 联系方式
+        widget: object
+        fields:
+          - name: github
+            label: GitHub
+            widget: string
+            type: url
+            required: false
+          - name: email
+            label: 邮箱
+            widget: string
+            type: email
+            required: false
+          - name: telegram
+            label: Telegram
+            widget: string
+            type: url
+            required: false
+          - name: x
+            label: X / Twitter
+            widget: string
+            type: url
+            required: false
+          - name: website
+            label: 个人网站
+            widget: string
+            type: url
+            required: false
+          - name: wechatQr
+            label: 微信二维码
+            widget: image
+            required: false
+      - name: aboutIntro
+        label: About 介绍
+        widget: text
+      - name: care
+        label: 我关注的事情
+        widget: list
+        label_singular: 关注主题
+        fields:
+          - name: title
+            label: 标题
+            widget: string
+          - name: description
+            label: 描述
+            widget: text
+      - name: seo
+        label: 搜索与分享信息
+        widget: object
+        fields:
+          - name: title
+            label: 页面标题
+            widget: string
+          - name: description
+            label: 页面描述
+            widget: text
+
+  - name: now
+    label: 现在 / Now
+    icon: update
+    file: src/content/now/current.md
+    format: yaml-frontmatter
+    extension: md
+    fields:
+      - name: updatedAt
+        label: 更新时间
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+      - name: building
+        label: Building / 正在构建
+        widget: object
+        fields:
+          - name: label
+            label: 小标题
+            widget: string
+          - name: text
+            label: 内容
+            widget: text
+      - name: exploring
+        label: Exploring / 正在探索
+        widget: object
+        fields:
+          - name: label
+            label: 小标题
+            widget: string
+          - name: text
+            label: 内容
+            widget: text
+      - name: learning
+        label: Learning / 正在学习
+        widget: object
+        fields:
+          - name: label
+            label: 小标题
+            widget: string
+          - name: text
+            label: 内容
+            widget: text
+
+collections:
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    icon: article
+    folder: src/content/posts
+    extension: md
+    format: yaml-frontmatter
+    summary: "{{title}}"
+    preview_path: /blog/{{slug}}
+    fields:
+      - name: title
+        label: 标题
+        widget: string
+      - name: description
+        label: 摘要
+        widget: text
+      - name: publishDate
+        label: 发布日期
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        default: '{{now}}'
+      - name: updatedDate
+        label: 更新日期
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        required: false
+      - name: draft
+        label: 草稿
+        widget: boolean
+        default: true
+        hint: 新文章默认是草稿，确认内容后再取消勾选。
+      - name: category
+        label: 分类
+        widget: string
+        default: Notes
+      - name: tags
+        label: 标签
+        widget: list
+        label_singular: 标签
+        required: false
+        default: []
+      - name: cover
+        label: 封面图片
+        widget: image
+        required: false
+      - name: coverAlt
+        label: 封面替代文字
+        widget: string
+        required: false
+        hint: 填写封面后请同时填写图片替代文字。
+      - name: featured
+        label: 首页精选
+        widget: boolean
+        default: false
+      - name: series
+        label: 系列
+        widget: string
+        required: false
+      - name: toc
+        label: 显示目录
+        widget: boolean
+        default: true
+      - name: comments
+        label: 评论开关（暂未接入）
+        widget: hidden
+        default: false
+      - name: canonical
+        label: Canonical 地址
+        widget: string
+        type: url
+        required: false
+      - name: body
+        label: 正文
+        widget: markdown
+
+  - name: projects
+    label: 项目
+    label_singular: 项目
+    icon: construction
+    folder: src/content/projects
+    extension: md
+    format: yaml-frontmatter
+    summary: "{{title}} · {{status}}"
+    preview_path: /projects/{{slug}}
+    fields:
+      - name: title
+        label: 名称
+        widget: string
+      - name: summary
+        label: 一句话简介
+        widget: text
+      - name: description
+        label: 项目描述
+        widget: text
+        required: false
+      - name: status
+        label: 状态
+        widget: select
+        options:
+          - { label: 想法, value: idea }
+          - { label: 构建中, value: building }
+          - { label: 持续维护, value: maintaining }
+          - { label: 暂停, value: paused }
+          - { label: 已归档, value: archived }
+      - name: statusLabel
+        label: 状态显示文字
+        widget: string
+        required: false
+      - name: startedAt
+        label: 开始日期
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        required: false
+      - name: endedAt
+        label: 结束日期
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        required: false
+      - name: stack
+        label: 技术栈
+        widget: list
+        label_singular: 技术
+        required: false
+        default: []
+      - name: repo
+        label: 源码仓库
+        widget: string
+        type: url
+        required: false
+      - name: demo
+        label: 在线演示
+        widget: string
+        type: url
+        required: false
+      - name: homepage
+        label: 项目主页
+        widget: string
+        type: url
+        required: false
+      - name: cover
+        label: 封面图片
+        widget: image
+        required: false
+      - name: featured
+        label: 首页精选
+        widget: boolean
+        default: false
+      - name: order
+        label: 显示顺序
+        widget: number
+        default: 0
+      - name: body
+        label: 项目详情
+        widget: markdown
+
+  - name: uses
+    label: Uses
+    label_singular: 工具
+    icon: build
+    folder: src/content/uses
+    extension: md
+    format: yaml-frontmatter
+    summary: "{{name}} · {{category}}"
+    fields:
+      - name: name
+        label: 名称
+        widget: string
+      - name: category
+        label: 分类
+        widget: select
+        options:
+          - Infrastructure
+          - Network
+          - AI
+          - Web
+          - Hardware
+          - Software
+          - Daily Tools
+      - name: description
+        label: 我正在使用它做什么
+        widget: text
+      - name: url
+        label: 链接
+        widget: string
+        type: url
+        required: false
+      - name: icon
+        label: 图标文字
+        widget: string
+        default: ✳
+      - name: recommended
+        label: 推荐
+        widget: boolean
+        default: false
+      - name: order
+        label: 显示顺序
+        widget: number
+        default: 0
+
+  - name: moments
+    label: 动态
+    label_singular: 短动态
+    icon: forum
+    folder: src/content/moments
+    extension: md
+    format: yaml-frontmatter
+    fields:
+      - name: publishDate
+        label: 发布时间
+        widget: datetime
+        type: datetime-local
+        default: '{{now}}'
+      - name: tags
+        label: 标签
+        widget: list
+        label_singular: 标签
+        required: false
+        default: []
+      - name: image
+        label: 图片
+        widget: image
+        required: false
+      - name: location
+        label: 地点
+        widget: string
+        required: false
+      - name: visibility
+        label: 可见范围
+        widget: select
+        options:
+          - { label: 公开, value: public }
+          - { label: 仅链接可见, value: unlisted }
+        default: unlisted
+        hint: 新动态默认不公开；确认后再选择“公开”。
+      - name: body
+        label: 内容
+        widget: markdown
+
+  - name: gallery
+    label: 相册
+    label_singular: 图片
+    icon: photo_library
+    folder: src/content/gallery
+    extension: md
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: 图片标题
+        widget: string
+      - name: image
+        label: 图片
+        widget: image
+      - name: alt
+        label: 图片替代文字
+        widget: string
+      - name: album
+        label: 相册分类
+        widget: string
+        default: Unsorted
+      - name: shotDate
+        label: 拍摄日期
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        required: false
+      - name: location
+        label: 拍摄地点
+        widget: string
+        required: false
+      - name: featured
+        label: 精选
+        widget: boolean
+        default: false
+
+  - name: timeline
+    label: 时间线
+    label_singular: 时间节点
+    icon: timeline
+    folder: src/content/timeline
+    extension: md
+    format: yaml-frontmatter
+    fields:
+      - name: date
+        label: 日期
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+      - name: title
+        label: 标题
+        widget: string
+      - name: type
+        label: 类型
+        widget: string
+        default: milestone
+      - name: description
+        label: 描述
+        widget: text
+      - name: link
+        label: 相关链接
+        widget: string
+        type: url
+        required: false

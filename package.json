@@ -19,7 +19,8 @@
     "lint": "eslint .",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
-    "test": "pnpm test:unit && pnpm test:e2e",
+    "test": "pnpm test:cms && pnpm test:unit && pnpm test:e2e",
+    "test:cms": "node scripts/validate-cms-config.mjs",
     "test:unit": "playwright test tests/unit --config=playwright.unit.config.ts",
     "test:e2e": "playwright test tests/e2e",
     "test:e2e:ui": "playwright test tests/e2e --ui",
@@ -48,6 +49,7 @@
     "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
-    "wrangler": "4.129.0"
+    "wrangler": "4.129.0",
+    "yaml": "2.9.0"
   }
 }
