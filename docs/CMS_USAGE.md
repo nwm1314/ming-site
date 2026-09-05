@@ -22,7 +22,7 @@
 
 文章的 `publishDate` 不能晚于构建时间，否则也不会进入公开列表。
 
-需要离线起草时，也可以复制 `templates/content/post.md`、`moment.md` 或 `project.md`。模板不属于生产内容；命令行还提供 `pnpm new:post` 和 `pnpm new:moment`，会询问标题、slug 和日期，并拒绝覆盖已有文件。
+需要离线起草时，也可以复制 `templates/content/post.md`、`moment.md` 或 `project.md`。模板不属于生产内容；复制模板后，必须填完所有 required fields，并通过内容校验后，才能放入 `src/content/` 等 production content。命令行还提供 `pnpm new:post` 和 `pnpm new:moment`：Post 会询问 Title、Description、Slug、Date，Moment 只询问 Slug、Date，并拒绝覆盖已有文件。
 
 ## 修改项目、工具和其他内容
 

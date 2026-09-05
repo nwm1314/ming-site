@@ -48,6 +48,6 @@ pnpm test:media
 
 `pnpm test:links` 只检查生成后的站内引用，不会请求公网外链；`pnpm test:media` 只报告媒体大小，不会压缩或修改文件。
 
-新内容可以复制 `templates/content/` 中的参考模板，或运行 `pnpm new:post` / `pnpm new:moment`。这些模板和命令默认生成安全边界（草稿或仅链接可见），不会生成虚构正文，也不会覆盖已有文件。
+新内容可以复制 `templates/content/` 中的参考模板，或运行 `pnpm new:post` / `pnpm new:moment`。复制模板后必须填完所有 required fields，并通过内容校验后再放入 production content；CLI scaffold 则直接生成 schema-valid、quality-valid 的安全 draft。这些模板和命令默认生成安全边界（草稿或仅链接可见），不会生成虚构正文，也不会覆盖已有文件。
 
 不要把 GitHub token、OAuth Secret、`.env` 或私人笔记提交到仓库。

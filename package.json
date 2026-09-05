@@ -19,9 +19,10 @@
     "lint": "eslint .",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
-    "test": "pnpm test:cms && pnpm test:content && pnpm test:unit && pnpm test:e2e",
+    "test": "pnpm test:cms && pnpm test:content && pnpm test:scaffold && pnpm test:unit && pnpm test:e2e",
     "test:cms": "node scripts/validate-cms-config.mjs",
     "test:content": "node scripts/validate-content.mjs",
+    "test:scaffold": "node scripts/test-new-content.mjs",
     "test:links": "node scripts/check-internal-links.mjs",
     "test:media": "node scripts/check-media.mjs",
     "test:unit": "playwright test tests/unit --config=playwright.unit.config.ts",
@@ -29,7 +30,9 @@
     "test:e2e:ui": "playwright test tests/e2e --ui",
     "test:privacy": "node scripts/privacy-smoke.mjs",
     "test:cf": "node scripts/test-cloudflare-routing.mjs",
-    "test:release": "node scripts/release-smoke.mjs"
+    "test:release": "node scripts/release-smoke.mjs",
+    "new:post": "node scripts/new-content.mjs post",
+    "new:moment": "node scripts/new-content.mjs moment"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.0",
