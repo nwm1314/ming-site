@@ -56,6 +56,7 @@ const articleHeadings = headings as MarkdownHeading[];
   title={`${post.data.title} — ${profile.data.displayName}`}
   description={post.data.description}
   image={cover}
+  imageAlt={post.data.coverAlt ?? post.data.title}
   ogType="article"
   canonical={canonical}
   articlePublishedTime={publishedTime}

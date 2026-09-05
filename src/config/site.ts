@@ -26,7 +26,7 @@ export const site = {
   indexable: buildIsIndexable,
   defaults: {
     theme: 'system' as const,
-    ogImage: '/favicon.svg',
+    ogImage: '/images/ming-og.webp',
   },
 };
 
