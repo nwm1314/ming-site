@@ -59,9 +59,13 @@ test('Blog and Projects intros keep headings clear of their descriptions', async
   await expect(cards).toHaveCount(3);
   const firstCard = await cards.nth(0).boundingBox();
   const secondCard = await cards.nth(1).boundingBox();
+  const thirdCard = await cards.nth(2).boundingBox();
   expect(firstCard).not.toBeNull();
   expect(secondCard).not.toBeNull();
+  expect(thirdCard).not.toBeNull();
   expect(Math.abs((firstCard?.width ?? 0) - (secondCard?.width ?? 0))).toBeLessThan(2);
+  expect(Math.abs((firstCard?.height ?? 0) - (thirdCard?.height ?? 0))).toBeLessThan(2);
+  await expect(page.locator('.project-featured-label')).toHaveCount(2);
 });
 
 test('mobile menu opens and exposes navigation', async ({ page }) => {
