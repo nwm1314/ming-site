@@ -36,6 +36,18 @@ jobs:
       - name: Build Astro site and Pagefind index
         run: pnpm build
 
+      - name: Validate content quality
+        run: pnpm test:content
+
+      - name: Check generated internal links
+        run: pnpm test:links
+
+      - name: Check media sizes
+        run: pnpm test:media
+
+      - name: Verify privacy boundaries
+        run: pnpm test:privacy
+
       - name: Run deterministic release smoke test
         run: pnpm test:release
 

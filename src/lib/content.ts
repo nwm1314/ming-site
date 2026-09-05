@@ -1,6 +1,6 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
-import { getPostsForTaxonomy, getPageCount, isPublicPost, paginatePosts } from './content/rules';
+import { getPostsForTaxonomy, getPageCount, isPublicMoment, isPublicPost, paginatePosts } from './content/rules';
 
 export * from './content/rules';
 
@@ -36,7 +36,7 @@ export async function getFeaturedProjects() {
 }
 
 export async function getPublicMoments() {
-  const entries = await getCollection('moments', ({ data }) => data.visibility === 'public');
+  const entries = await getCollection('moments', isPublicMoment);
   return entries.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 }
 
