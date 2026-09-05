@@ -2,6 +2,9 @@
 import Header from '../components/common/Header.astro';
 import Footer from '../components/common/Footer.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProfile } from '../lib/content';
+
+const profile = await getProfile();
 ---
 
-<BaseLayout title="About — Ming" description="关于 Ming，以及正在构建的个人数字空间。"><Header /><main id="main-content" class="content-page about-page"><div class="page-intro"><p class="eyebrow">/ a little context</p><h1>About<span class="hero-punctuation">.</span></h1><p>这里记录正在做的东西，以及让日常更顺手的工具和方法。</p></div><div class="about-grid"><div><p class="eyebrow">who I am</p><p class="about-large">我是 Ming，目前把时间花在代码、网络、AI 工具和个人工作流上，也在把这些实践整理成一个可以打开的个人空间。</p></div><div class="about-notes"><p><span>01</span> 做有用、可打开的东西</p><p><span>02</span> 保持好奇，也保留一点松弛</p><p><span>03</span> 把过程写下来，方便下次找到自己</p></div></div></main><Footer /></BaseLayout>
+<BaseLayout title={`About — ${profile.data.displayName}`} description={`关于 ${profile.data.displayName}，以及正在构建的个人数字空间。`}><Header /><main id="main-content" class="content-page about-page"><div class="page-intro"><p class="eyebrow">/ a little context</p><h1>About<span class="hero-punctuation">.</span></h1><p>这里记录正在做的东西，以及让日常更顺手的工具和方法。</p></div><div class="about-grid"><div><p class="eyebrow">who I am</p><p class="about-large">{profile.data.aboutIntro}</p><div class="contact-block"><p class="eyebrow">say hello</p><div class="contact-links">{profile.data.contacts.github && <a class="text-link" href={profile.data.contacts.github} target="_blank" rel="noreferrer">@nwm1314 ↗</a>}{profile.data.contacts.email && <a class="text-link" href={`mailto:${profile.data.contacts.email}`}>{profile.data.contacts.email} ↗</a>}</div></div></div><div class="about-notes"><p class="eyebrow">what I care about</p>{profile.data.care.map((item, index) => <p><span>{String(index + 1).padStart(2, '0')}</span><strong>{item.title}</strong><small>{item.description}</small></p>)}</div></div></main><Footer /></BaseLayout>
