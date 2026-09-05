@@ -13,6 +13,10 @@ This site deploys as an Astro static build to **Cloudflare Workers Static Assets
 - Production deploy command: `pnpm exec wrangler deploy`
 - Non-production preview deploy command: `pnpm exec wrangler versions upload`
 
+## Current production
+
+Production is live at [https://nwmnow.com](https://nwmnow.com). The Cloudflare Workers Custom Domain is active, with `SITE_URL=https://nwmnow.com` and `SITE_INDEXABLE=true`. Google Search Console is connected and its sitemap was submitted successfully; Bing Webmaster Tools is connected and processing the sitemap.
+
 `wrangler.jsonc` explicitly keeps `workers_dev` enabled and enables `preview_urls`. Its Static Assets routing uses `html_handling: "auto-trailing-slash"`, `not_found_handling: "404-page"`, and `run_worker_first: false`. An unmatched request is therefore served by `dist/404.html` with HTTP 404; this site does not use SPA fallback or a Worker runtime rewrite.
 
 `pnpm deploy` performs a production build and deploy. `pnpm cf:preview` builds and starts a local Workers preview. `pnpm cf:dry-run` validates the Wrangler upload without deploying. After `pnpm build`, `pnpm test:cf` starts `wrangler dev --local` and verifies the Workers Static Assets status codes, including the custom 404 response.
@@ -27,6 +31,13 @@ SITE_INDEXABLE=false
 ```
 
 `SITE_URL` has a local fallback of `http://localhost:4321`; `SITE_INDEXABLE` defaults to `false`. The same resolved site URL is used for canonical links, RSS, sitemap, robots, Open Graph, and JSON-LD. Staging emits `noindex, nofollow` and `Disallow: /`.
+
+For the live production deployment, the configured values are:
+
+```text
+SITE_URL=https://nwmnow.com
+SITE_INDEXABLE=true
+```
 
 Toolchain sources are `.node-version` (`22`) and `package.json` (`pnpm@11.19.0`). Configure Workers Builds to use Node 22; pnpm is read from the package manager declaration.
 
@@ -44,7 +55,7 @@ The first successful build is available from **Deployments → Version history �
 
 The Sveltia CMS interface is a static asset at `/admin`. It is not part of the Astro page bundle, sitemap, or Pagefind index. The checked-in configuration uses the GitHub backend for `nwm1314/ming-site`, simple publishing, and the internal media folder `public/uploads/`.
 
-The current Phase 4A authentication path is Sveltia’s **Sign In with Token** flow. No GitHub OAuth App, OAuth secret, Worker authenticator, or CMS token is stored in this repository. Follow [CMS_USAGE.md](./CMS_USAGE.md) for the editor workflow. OAuth is intentionally deferred to Phase 4B.
+The production authentication path is Sveltia’s **Sign In with Token** flow. The production workflow has been verified. No GitHub OAuth App, OAuth secret, Worker authenticator, or CMS token is stored in this repository. Follow [CMS_USAGE.md](./CMS_USAGE.md) for the editor workflow.
 
 ## Release validation
 
@@ -57,13 +68,13 @@ pnpm test:cf
 
 The check expects `/`, `/blog`, an existing article, `/search`, `/rss.xml`, and `/robots.txt` to resolve successfully. It allows the explicit `/404` page to behave according to the generated static output, and specifically requires an unknown path to return HTTP 404 and contain the custom 404 marker.
 
-## Final launch
+## Production verification
 
-After reviewing the staging build and confirming the real personal content, bind a custom domain from **Worker Settings → Domains & Routes → Add custom domain**. Set:
+The custom domain is already bound from **Worker Settings → Domains & Routes → Add custom domain**. Keep these values for production:
 
 ```text
-SITE_URL=https://your-final-domain.example
+SITE_URL=https://nwmnow.com
 SITE_INDEXABLE=true
 ```
 
-Then trigger a new `main` build. This is the only launch switch needed to enable indexing; no page-level environment checks should be added.
+This is the only indexing switch; no page-level environment checks should be added. For staging and preview branches, keep `SITE_INDEXABLE=false` and use the relevant non-production host as `SITE_URL`.
