@@ -11,6 +11,7 @@ import BaseLayout from './BaseLayout.astro';
 import {
   formatDate,
   getAdjacentPosts,
+  getProfile,
   getPublicPosts,
   getRelatedPosts,
   readingTime,
@@ -25,6 +26,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
+const profile = await getProfile();
 const { Content, headings } = await render(post);
 const publicPosts = await getPublicPosts();
 const { previous, next } = getAdjacentPosts(publicPosts, post.id);
@@ -51,7 +53,7 @@ const articleHeadings = headings as MarkdownHeading[];
 ---
 
 <BaseLayout
-  title={`${post.data.title} — ${site.siteName}`}
+  title={`${post.data.title} — ${profile.data.displayName}`}
   description={post.data.description}
   image={cover}
   ogType="article"

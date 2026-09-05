@@ -14,7 +14,7 @@ const projects = await getFeaturedProjects();
     <div class="project-grid">
       {projects.map((project, index) => (
         <a class:list={{ 'project-card': true, 'project-card-featured': index === 0 }} href={`/projects/${project.id}`}>
-          <div class="project-card-top"><span class="project-number">0{index + 1}</span><span class="project-status"><span class="status-dot"></span>{project.data.status}</span></div>
+          <div class="project-card-top"><span class="project-number">0{index + 1}</span><span class="project-status"><span class="status-dot"></span>{project.data.statusLabel ?? project.data.status}</span></div>
           <div class="project-card-content"><h3>{project.data.title}</h3><p>{project.data.summary}</p></div>
           <div class="project-card-bottom"><span>{project.data.stack.slice(0, 3).join(' · ')}</span><span class="card-arrow" aria-hidden="true">↗</span></div>
         </a>

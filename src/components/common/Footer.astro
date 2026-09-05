@@ -1,7 +1,8 @@
 ---
 import { exploreLinks } from '../../config/navigation';
-import { site } from '../../config/site';
-import { socialLinks } from '../../config/social';
+import { getProfile } from '../../lib/content';
+
+const profile = await getProfile();
 ---
 
 <footer class="site-footer" data-pagefind-ignore>
@@ -13,12 +14,13 @@ import { socialLinks } from '../../config/social';
     <p class="footer-note">一个轻量、诚实、慢慢更新的个人角落。<br />下次见，希望这里又多了一点新东西。</p>
   </div>
   <div class="footer-bottom">
-    <span>© {new Date().getFullYear()} {site.author}</span>
+    <span>© {new Date().getFullYear()} {profile.data.displayName}</span>
     <nav aria-label="Footer navigation">
       {exploreLinks.slice(0, 4).map((link) => <a href={link.href}>{link.label}</a>)}
     </nav>
     <div class="footer-socials">
-      {socialLinks.map((social) => <a href={social.href} target={social.href.startsWith('http') ? '_blank' : undefined} rel={social.href.startsWith('http') ? 'noreferrer' : undefined}>{social.short}</a>)}
+      {profile.data.contacts.github && <a href={profile.data.contacts.github} target="_blank" rel="noreferrer">GH</a>}
+      {profile.data.contacts.email && <a href={`mailto:${profile.data.contacts.email}`}>Mail</a>}
     </div>
   </div>
 </footer>

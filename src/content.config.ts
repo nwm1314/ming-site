@@ -32,12 +32,63 @@ const posts = defineCollection({
     }),
 });
 
+const profile = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/profile' }),
+  schema: z.object({
+    displayName: z.string().trim().min(1),
+    tagline: z.string().trim().min(1),
+    bio: z.string().trim().min(1),
+    status: z.string().trim().min(1),
+    avatar: z.object({
+      src: z.string().trim().min(1).optional(),
+      alt: z.string().trim().min(1),
+      width: z.number().int().positive(),
+      height: z.number().int().positive(),
+      fallback: z.string().trim().min(1).default('M'),
+    }),
+    contacts: z.object({
+      github: z.url().optional(),
+      email: z.email().optional(),
+      telegram: z.url().optional(),
+      x: z.url().optional(),
+      website: z.url().optional(),
+      wechatQr: z.string().trim().min(1).optional(),
+    }),
+    aboutIntro: z.string().trim().min(1),
+    care: z.array(
+      z.object({
+        title: z.string().trim().min(1),
+        description: z.string().trim().min(1),
+      }),
+    ),
+    seo: z.object({
+      title: z.string().trim().min(1),
+      description: z.string().trim().min(1),
+    }),
+  }),
+});
+
+const now = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/now' }),
+  schema: z.object({
+    updatedAt: z.coerce.date(),
+    items: z.array(
+      z.object({
+        key: z.enum(['building', 'exploring', 'learning']),
+        label: z.string().trim().min(1),
+        text: z.string().trim().min(1),
+      }),
+    ).min(1),
+  }),
+});
+
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
     description: z.string().optional(),
+    statusLabel: z.string().trim().min(1).optional(),
     status: z.enum(['idea', 'building', 'maintaining', 'paused', 'archived']),
     startedAt: z.coerce.date().optional(),
     endedAt: z.coerce.date().optional(),
@@ -99,4 +150,4 @@ const uses = defineCollection({
   }),
 });
 
-export const collections = { posts, projects, moments, gallery, timeline, uses };
+export const collections = { posts, projects, moments, gallery, timeline, uses, profile, now };

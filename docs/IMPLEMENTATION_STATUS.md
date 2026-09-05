@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2.6 — Brand & Responsive Polish
+Phase 3A — Personal Identity + Real Content
 
 ## Completed
 
@@ -26,6 +26,13 @@ Phase 2.6 — Brand & Responsive Polish
 - Reworked Hero spacing and responsive type so the large `Ming.` composition keeps its editorial character without covering the Chinese subtitle from phone through desktop widths.
 - Made the mobile menu stateful and keyboard-friendly: synchronized accessible names, `aria-expanded`, `aria-controls`, first-link focus, Escape close, and focus return.
 - Expanded `hello-from-the-desk` into a short intro article and made both project summaries concrete without inventing personal history or results.
+- Added CMS-ready `profile` and `now` content collections with schema validation; frequently changed identity, About copy, contacts, care topics, avatar metadata, and Now cards no longer live in components or technical config.
+- Replaced the initials-only Hero mark with the provided avatar, optimized to `public/images/ming-avatar.webp` at 960×960 and roughly 72 KB, while preserving the paper/grid/orbit/card composition and fixed dimensions.
+- Replaced example project content with the verified Insurance Recommendation Engine, Cyber Divination, and `ming-site` entries; homepage featured order is insurance recommendation, Cyber Divination, then the smaller `ming-site` entry on the Projects page.
+- Corrected public GitHub identity to `https://github.com/nwm1314`; contact rendering is content-driven and empty optional contacts stay hidden.
+- Rewrote About and What I Care About from the supplied Ming copy, and added `docs/CONTENT_MAINTENANCE.md` for non-developer content updates.
+- Removed the `desk-notes`, gallery placeholder, and starter moment from production content instead of publishing fictional or placeholder material.
+- Added `pnpm test:privacy` to scan generated output for legacy placeholder identity/content and to confirm JSON-LD uses `Ming`; expanded E2E coverage for identity, Now, projects, links, and contacts.
 
 ## Architecture Decisions
 
@@ -63,7 +70,7 @@ Phase 2.6 — Brand & Responsive Polish
 
 ## Known Issues
 
-- No portrait or public email is configured; the site intentionally uses an initials mark and the existing GitHub link until real personal assets or contact details are available.
+- Moments and Gallery currently render empty collections by design; no placeholder entries are published until real material is available.
 - Pagefind does not stem Chinese terms; exact/substring search remains available.
 - No comments provider is connected by design.
 - `pnpm format` still reports historical formatting drift in 58 files outside this release task; it was not applied because it would create a broad, low-value diff. This does not block the release gate.
@@ -72,15 +79,16 @@ Phase 2.6 — Brand & Responsive Polish
 
 - `pnpm install --frozen-lockfile` — passed.
 - `pnpm lint` — passed.
-- `pnpm check` — passed with 0 errors, 0 warnings, 0 hints.
-- `pnpm build` — passed; 25 static pages generated and 2 Pagefind pages indexed.
+- `pnpm check` — passed with 0 errors, 0 warnings, and 0 hints.
+- `pnpm build` — passed; 26 static pages generated and 2 Pagefind pages indexed.
 - `pnpm test:unit` — passed, 7 tests including pagination boundaries.
-- `pnpm test:e2e` — passed, 8 Chromium smoke tests.
+- `pnpm test:e2e` — passed, 11 Chromium smoke tests including Ming identity, real projects, contact links, Now content, mobile menu, search, Blog, 404, and staging robots.
+- `pnpm test:privacy` — passed across 50 generated files; no legacy placeholder identity/content found.
 - `pnpm test:cf` — passed under `wrangler dev --local`: `/`, `/blog`, existing article, `/search`, `/rss.xml`, `/robots.txt`, and `/404` returned 200; unknown path returned HTTP 404 with the custom 404 marker.
-- Phase 2.6 browser review — Chromium screenshots captured at 320×720, 390×844, 768×900, 1024×768, and 1440×900 in Light and Dark themes; no horizontal overflow and no Hero subtitle overlap observed. Mobile menu open/close, Escape, and focus return passed.
+- Phase 3A browser review — Playwright screenshots captured at 390×844 and 1440×900 in Light and Dark themes; overflow checks passed at 320, 390, 768, 1024, and 1440 widths; no Hero subtitle overlap, avatar crop issue, project-card overflow, or mobile horizontal scrolling observed.
 - `pnpm cf:dry-run` — passed with Wrangler 4.129.0; 77 static assets read, no upload performed.
 - Output checks — 2 public article routes, 2 RSS items, draft/future fixture content absent from public output, no comments placeholder, no taxonomy/list/search Pagefind duplicates, staging noindex/robots behavior verified, and `SITE_URL` override verified across canonical/OG/RSS/sitemap-index/sitemap/robots/JSON-LD.
 
 ## Next Recommended Task
 
-Cloudflare staging verification plus real Desktop/Android visual review. Only after that should the project resume Phase 3 Personal Space detail work.
+Phase 3A Preview UI Review → merge the feature branch after Cloudflare preview verification → Phase 4 Sveltia CMS.

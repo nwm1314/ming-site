@@ -102,7 +102,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: -0.0
 .avatar-card { position: relative; display: grid; place-items: center; width: min(31vw, 360px); aspect-ratio: 0.86; border: 1px solid var(--ink); background: var(--sky); box-shadow: 13px 13px 0 var(--ink); transform: rotate(3.5deg); overflow: hidden; }
 .avatar-card::before { content: ''; position: absolute; inset: 18px; border: 1px dashed var(--ink); opacity: 0.45; }
 .avatar-placeholder { position: relative; z-index: 1; display: grid; place-items: center; width: 48%; aspect-ratio: 1; border: 1px solid var(--ink); border-radius: 50%; background: var(--accent); font-family: var(--display); font-size: clamp(4rem, 9vw, 8rem); line-height: 1; box-shadow: 8px 8px 0 var(--ink); }
-.avatar-card img { width: 48%; aspect-ratio: 1; border: 1px solid var(--ink); border-radius: 50%; object-fit: cover; box-shadow: 8px 8px 0 var(--ink); }
+.avatar-card img { position: relative; z-index: 1; display: block; width: 48%; height: auto; aspect-ratio: 1; border: 1px solid var(--ink); border-radius: 50%; object-fit: cover; object-position: center 34%; box-shadow: 8px 8px 0 var(--ink); }
 .avatar-orbit { position: absolute; border: 1px solid var(--ink); border-radius: 50%; opacity: 0.7; }
 .avatar-orbit-one { width: 120%; height: 52%; transform: rotate(35deg); }
 .avatar-orbit-two { width: 66%; height: 128%; transform: rotate(35deg); }
@@ -125,7 +125,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: -0.0
 .now-item:last-child { border-right: 0; }
 .now-index { color: var(--coral-text); font-family: var(--mono); font-size: 0.65rem; }
 .now-kicker { display: block; margin-bottom: 13px; color: var(--ink-soft); font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; }
-.now-item strong { display: block; max-width: 250px; font-family: var(--display); font-size: 1.35rem; font-weight: 500; line-height: 1.07; }
+.now-item strong { display: block; max-width: 250px; font-family: var(--display); font-size: 1.35rem; font-weight: 500; line-height: 1.07; white-space: pre-line; }
 .now-scribble { position: absolute; right: 22px; bottom: 18px; color: var(--coral); font-size: 1.8rem; transform: rotate(-20deg); }
 
 .projects-section, .posts-section, .desk-section, .explore-section { padding-top: 98px; padding-bottom: 98px; }
@@ -237,8 +237,13 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: -0.0
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding-top: 20px; border-top: 1px solid var(--ink); }
 .about-large { max-width: 520px; font-family: var(--display); font-size: clamp(2rem, 4vw, 3.7rem); line-height: 1.02; }
 .about-notes { padding-top: 12px; }
-.about-notes p { display: flex; gap: 18px; margin: 0; padding: 18px 0; border-bottom: 1px solid var(--line); font-family: var(--display); font-size: 1.35rem; }
+.about-notes p { display: grid; grid-template-columns: 28px 1fr; gap: 3px 18px; margin: 0; padding: 18px 0; border-bottom: 1px solid var(--line); font-family: var(--display); font-size: 1.35rem; }
 .about-notes span { color: var(--coral-text); font-family: var(--mono); font-size: 0.65rem; }
+.about-notes > .eyebrow { display: block; padding: 0 0 14px; border-bottom: 1px solid var(--ink); }
+.about-notes strong { font-weight: 500; }
+.about-notes small { grid-column: 2; color: var(--ink-soft); font-family: var(--body); font-size: 0.78rem; line-height: 1.4; }
+.contact-block { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); }
+.contact-links { display: flex; flex-wrap: wrap; gap: 16px 24px; }
 .empty-gallery { display: grid; place-items: center; min-height: 340px; border: 1px dashed var(--line); color: var(--ink-soft); }
 .empty-gallery span { color: var(--coral); font-size: 3rem; }
 .empty-gallery p { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; }
