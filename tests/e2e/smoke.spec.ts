@@ -138,6 +138,19 @@ test('staging pages and robots are not indexable by default', async ({ page, req
   expect(await robots.text()).toContain('Disallow: /');
 });
 
+test('admin loads the pinned CMS shell without entering site indexes', async ({ page, request }) => {
+  const response = await page.goto('/admin');
+  expect(response?.status()).toBe(200);
+  await expect(page.locator('meta[name="robots"][content="noindex, nofollow"]')).toHaveCount(1);
+  await expect(page.locator('script[src*="@sveltia/cms@0.205.4"]')).toHaveCount(1);
+  await expect(page.locator('[data-pagefind-body]')).toHaveCount(0);
+
+  const config = await request.get('/admin/config.yml');
+  expect(config.ok()).toBe(true);
+  const sitemap = await request.get('/sitemap-index.xml');
+  expect(await sitemap.text()).not.toContain('/admin');
+});
+
 test('unknown routes use the designed 404 page', async ({ page }) => {
   const response = await page.goto('/this-route-does-not-exist');
   expect(response?.status()).toBe(404);

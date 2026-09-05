@@ -11,6 +11,8 @@ const routes = [
   { path: '/search', expectedStatus: 200 },
   { path: '/rss.xml', expectedStatus: 200 },
   { path: '/robots.txt', expectedStatus: 200 },
+  { path: '/admin', expectedStatus: 200, admin: true },
+  { path: '/admin/config.yml', expectedStatus: 200 },
   { path: '/404', expectedStatus: [200, 404] },
   { path: '/random-nonexistent-path', expectedStatus: 404, custom404: true },
 ];
@@ -107,6 +109,13 @@ try {
         throw new Error(
           `${route.path}: response did not contain the custom 404 marker`,
         );
+      }
+    }
+
+    if (route.admin) {
+      const body = await response.text();
+      if (!body.includes('<meta name="robots" content="noindex, nofollow"')) {
+        throw new Error(`${route.path}: response did not contain the admin noindex marker`);
       }
     }
 

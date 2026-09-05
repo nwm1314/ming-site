@@ -40,6 +40,12 @@ Toolchain sources are `.node-version` (`22`) and `package.json` (`pnpm@11.19.0`)
 
 The first successful build is available from **Deployments → Version history → View build**. The version details include a versioned `workers.dev` preview URL. The Worker overview also shows its stable `workers.dev` URL; use that URL for staging `SITE_URL`. With the GitHub integration, pull requests can also receive the build status and preview links. Workers Builds owns this preview behavior; no branch router or custom preview URL system is needed.
 
+## CMS administration
+
+The Sveltia CMS interface is a static asset at `/admin`. It is not part of the Astro page bundle, sitemap, or Pagefind index. The checked-in configuration uses the GitHub backend for `nwm1314/ming-site`, simple publishing, and the internal media folder `public/uploads/`.
+
+The current Phase 4A authentication path is Sveltia’s **Sign In with Token** flow. No GitHub OAuth App, OAuth secret, Worker authenticator, or CMS token is stored in this repository. Follow [CMS_USAGE.md](./CMS_USAGE.md) for the editor workflow. OAuth is intentionally deferred to Phase 4B.
+
 ## Release validation
 
 Run the local Workers route check after a production build:

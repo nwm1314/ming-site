@@ -2,9 +2,18 @@
 
 ## Current Phase
 
-Phase 3A — Personal Identity + Real Content
+Phase 4A — Sveltia CMS + Content Editing Workflow
 
 ## Completed
+
+- Created `feature/phase-4a-sveltia-cms` from the latest `origin/main`; the production `main` branch was not modified.
+- Added the static `/admin` Sveltia CMS shell with exact CDN pin `@sveltia/cms@0.205.4`, GitHub backend `nwm1314/ming-site`, simple publishing, and internal media storage at `public/uploads/`.
+- Used Sveltia root-level `singletons` for `profile/ming.md` and `now/current.md`, so editors can modify the two fixed files without creating or deleting a second singleton.
+- Changed Now from an editor-hostile `items[]` list to fixed `building`, `exploring`, and `learning` objects. The Astro schema, frontmatter, component, CMS fields, and maintenance docs all use the same model.
+- Mapped Posts, Projects, Uses, Moments, Gallery, and Timeline to the current Astro content paths and schemas. Posts default to draft; new Moments default to unlisted.
+- Added localized, user-facing labels, select controls for project status and Moment visibility, Markdown editors for body content, media hints, post/project preview paths, and optional-field omission.
+- Added CMS configuration validation, singleton/path guards, admin noindex and Pagefind checks, and Cloudflare route coverage for `/admin` and `/admin/config.yml`.
+- Added `docs/CMS_USAGE.md` and updated the maintenance/deployment handoff for the web CMS workflow while retaining direct Markdown editing.
 
 - Separated Phase 2 pagination/search sample posts from production content. `src/content/posts/` now contains only the two Phase 1 public examples and the Phase 1 draft used to verify release filtering.
 - Added pure `getPageCount()` and `paginatePosts()` rules with test fixtures covering 0, 1, 8, 9, 16, and 17 posts.
@@ -40,8 +49,17 @@ Phase 3A — Personal Identity + Real Content
 - The production public-post rule remains `draft === false && publishDate <= build time`; all production-facing post queries use the shared helper.
 - Site URL and indexability are build-time configuration, not route-local checks. `SITE_URL` drives canonical, RSS, sitemap, robots, OG, and JSON-LD values.
 - GitHub Actions remains a quality gate. Cloudflare Workers Builds owns deployment and receives no production token from this repository.
+- Sveltia CMS is a static CDN application isolated under `/admin`; it is not imported by public Astro pages. The CMS uses the GitHub backend and commits Markdown/media directly to Git.
+- Phase 4A uses Sveltia’s Sign In with Token flow for the single editor. Tokens live only in browser storage during use; OAuth Authenticator remains a Phase 4B prerequisite.
+- The CMS configuration is validated against the pinned release’s JSON schema by editor tooling and by a repository-local structural smoke test. No token, OAuth secret, `.env`, or credential fixture is present.
 - Static Assets are served first for every request. There is no Worker main script; unknown paths use `dist/404.html` with HTTP 404, and SPA fallback remains disabled.
 - `workers_dev` and Wrangler Preview URLs are explicitly enabled. Workers Builds uses `wrangler deploy` for `main` and `wrangler versions upload` for non-production branches.
+
+## Sveltia CMS Version
+
+- Pinned version: `@sveltia/cms@0.205.4`, the current official Latest release checked on 2026-09-05.
+- Why pinned: Sveltia’s CDN otherwise follows the latest release automatically. An exact pin makes the `/admin` runtime and its config schema change together and gives this project a deliberate rollback point.
+- Upgrade strategy: review the official release notes and blocking issue reports, update the script URL and schema URL together, run `pnpm test:cms`, `pnpm build`, the browser review, and all release checks before committing the new pin. The previous `0.205.1` release specifically fixed an infinite-loop content-editor regression; this is why the selected release is verified in the actual login shell rather than chosen blindly.
 
 ## Cloudflare Decision
 
@@ -73,6 +91,8 @@ Phase 3A — Personal Identity + Real Content
 - Moments and Gallery currently render empty collections by design; no placeholder entries are published until real material is available.
 - Pagefind does not stem Chinese terms; exact/substring search remains available.
 - No comments provider is connected by design.
+- Real GitHub read/write authentication and Android save/commit/build acceptance still require the owner’s token and Cloudflare Preview environment; they are intentionally not automated in CI.
+- The empty Moments and Gallery collections produce the existing Astro glob/empty-collection build warnings until real content is added. No placeholder content was published to silence them.
 - `pnpm format` still reports historical formatting drift in 58 files outside this release task; it was not applied because it would create a broad, low-value diff. This does not block the release gate.
 
 ## Verification
@@ -82,13 +102,15 @@ Phase 3A — Personal Identity + Real Content
 - `pnpm check` — passed with 0 errors, 0 warnings, and 0 hints.
 - `pnpm build` — passed; 26 static pages generated and 2 Pagefind pages indexed.
 - `pnpm test:unit` — passed, 7 tests including pagination boundaries.
-- `pnpm test:e2e` — passed, 11 Chromium smoke tests including Ming identity, real projects, contact links, Now content, mobile menu, search, Blog, 404, and staging robots.
-- `pnpm test:privacy` — passed across 50 generated files; no legacy placeholder identity/content found.
-- `pnpm test:cf` — passed under `wrangler dev --local`: `/`, `/blog`, existing article, `/search`, `/rss.xml`, `/robots.txt`, and `/404` returned 200; unknown path returned HTTP 404 with the custom 404 marker.
+- `pnpm test:e2e` — passed, 13 Chromium smoke tests including Ming identity, real projects, contact links, Now content, mobile menu, search, Blog, 404, staging robots, and `/admin`.
+- `pnpm test:privacy` — passed across 53 generated files; no legacy placeholder identity/content found.
+- `pnpm test:cf` — passed under `wrangler dev --local`: public routes, `/admin`, `/admin/config.yml`, and the custom 404 response behaved as expected.
 - Phase 3A browser review — Playwright screenshots captured at 390×844 and 1440×900 in Light and Dark themes; overflow checks passed at 320, 390, 768, 1024, and 1440 widths; no Hero subtitle overlap, avatar crop issue, project-card overflow, or mobile horizontal scrolling observed.
-- `pnpm cf:dry-run` — passed with Wrangler 4.129.0; 77 static assets read, no upload performed.
+- `pnpm cf:dry-run` — passed with Wrangler 4.129.0; 85 static assets read, no upload performed.
 - Output checks — 2 public article routes, 2 RSS items, draft/future fixture content absent from public output, no comments placeholder, no taxonomy/list/search Pagefind duplicates, staging noindex/robots behavior verified, and `SITE_URL` override verified across canonical/OG/RSS/sitemap-index/sitemap/robots/JSON-LD.
+- `pnpm test:cms` — passed; YAML parsing, pinned Sveltia version, GitHub backend, singleton files, content folders, collection fields, safe defaults, explicit `getEntry` IDs, and optional Pagefind output checks passed.
+- Manual browser review — passed at desktop 1440×900 and mobile 390×844. Sveltia login UI loaded in Simplified Chinese, the token dialog opened without entering a token, and the browser console showed 0 errors / 0 warnings after reload.
 
 ## Next Recommended Task
 
-Phase 3A Preview UI Review → merge the feature branch after Cloudflare preview verification → Phase 4 Sveltia CMS.
+Phase 4A owner acceptance on Android/Cloudflare Preview → review and merge the PR → Phase 4B OAuth Authenticator only after explicit approval.

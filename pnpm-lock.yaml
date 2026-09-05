@@ -69,6 +69,9 @@ importers:
       wrangler:
         specifier: 4.129.0
         version: 4.129.0
+      yaml:
+        specifier: 2.9.0
+        version: 2.9.0
 
 packages:
 

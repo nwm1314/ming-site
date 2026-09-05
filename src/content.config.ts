@@ -72,13 +72,18 @@ const now = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/now' }),
   schema: z.object({
     updatedAt: z.coerce.date(),
-    items: z.array(
-      z.object({
-        key: z.enum(['building', 'exploring', 'learning']),
-        label: z.string().trim().min(1),
-        text: z.string().trim().min(1),
-      }),
-    ).min(1),
+    building: z.object({
+      label: z.string().trim().min(1),
+      text: z.string().trim().min(1),
+    }),
+    exploring: z.object({
+      label: z.string().trim().min(1),
+      text: z.string().trim().min(1),
+    }),
+    learning: z.object({
+      label: z.string().trim().min(1),
+      text: z.string().trim().min(1),
+    }),
   }),
 });
 

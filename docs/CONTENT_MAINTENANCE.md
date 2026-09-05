@@ -1,69 +1,37 @@
 # 内容维护指南
 
-日常内容都在 `src/content/` 里维护。改完后提交 Git，Cloudflare 构建就会把 Markdown 内容生成到网站上。
+## 推荐：网页后台
 
-## 修改首页介绍
+日常维护优先使用部署后的 `/admin`。它适合手机和电脑，可以编辑 Now、写文章、维护项目和上传图片。后台使用 GitHub 保存修改，Git 仓库仍然是唯一内容真源；CMS 没有额外数据库。
 
-编辑 `src/content/profile/ming.md`：
+详细的登录、保存和发布步骤见 [CMS_USAGE.md](./CMS_USAGE.md)。
 
-- `tagline`：Hero 下方的一句话
-- `bio`：首页个人介绍
-- `status`：头像卡片旁边的当前状态
-- `seo.title` / `seo.description`：首页标题和描述
+### 内容入口
 
-公开身份统一使用 `Ming`，不要在文件里添加真实姓名或未确认的个人经历。
+- `个人资料`：编辑 `src/content/profile/ming.md`，包括首页一句话、简介、状态、头像、联系方式、About 和 SEO 信息。
+- `现在 / Now`：编辑 `src/content/now/current.md` 的 `updatedAt`、`building`、`exploring`、`learning` 四块内容。
+- `文章`：管理 `src/content/posts/`。新文章默认是草稿；只有取消 `draft` 后才会进入公开页面、RSS 和搜索。
+- `项目`：管理 `src/content/projects/`。状态使用固定选项，`featured` 和 `order` 控制首页精选顺序。
+- `Uses`：管理 `src/content/uses/`，记录正在使用的工具，不填写技能等级或百分比。
+- `动态`：管理 `src/content/moments/`。新建内容默认仅链接可见，确认后才改为公开。
+- `相册`：管理 `src/content/gallery/`，目前只接入内容模型，不会自动增加新的前台动画。
+- `时间线`：管理 `src/content/timeline/`，只填写真实发生过的节点。
 
-## 更新 Now
+`个人资料` 和 `现在 / Now` 是固定文件。后台可以修改它们，但不能创建第二份，也不能删除唯一文件。
 
-编辑 `src/content/now/current.md`：
+## 高级：直接 Markdown
 
-- `updatedAt`：最后更新时间
-- `items`：按 `building`、`exploring`、`learning` 顺序维护三张卡片
+需要批量修改、检查 diff 或离线写作时，继续直接维护 `src/content/`。复制同一目录下的现有文件，保持字段名、日期格式和枚举值与 `src/content.config.ts` 一致。
 
-每一项的 `text` 可以使用 YAML 多行文本，换行会在卡片中保留。
+### 头像
 
-## 修改联系方式
+继续使用 `public/images/ming-avatar.webp` 或通过后台上传到 `public/uploads/`。推荐正方形 WebP，约 960×960，尽量不超过 500 KB。头像替换后同步确认 `src/content/profile/ming.md` 的 `avatar.src`、`alt`、`width` 和 `height`。
 
-编辑 `src/content/profile/ming.md` 的 `contacts`：
+### 联系方式
 
-- `github`：个人 GitHub 地址
-- `email`：邮箱地址
-- `telegram`、`x`、`website`、`wechatQr`：以后需要时再填
+编辑 Profile 的 `contacts`。没有值的可选联系方式不会渲染空链接；公开身份统一使用 `Ming`，不要添加真实姓名或未确认的个人经历。
 
-没有值的联系方式不会渲染成空链接或占位文字。
-
-## 添加项目
-
-在 `src/content/projects/` 新建一个 `.md` 文件。可以复制现有项目的 frontmatter，并修改这些字段：
-
-```yaml
-title: "项目名称"
-summary: "首页显示的一句话简介"
-description: "项目详情描述"
-status: building
-statusLabel: "Building"
-stack: ["真实使用的技术"]
-repo: "https://github.com/..."
-demo: "https://..."
-featured: false
-order: 4
-```
-
-只填写仓库或项目中能够确认的技术。`featured: true` 的项目会出现在首页精选区，`order` 越小越靠前。
-
-## 修改头像
-
-把优化后的图片放到 `public/images/ming-avatar.webp`，推荐使用正方形、约 960×960 的 WebP，尽量控制在几百 KB 以内。然后在 `src/content/profile/ming.md` 更新 `avatar.src`、`width`、`height` 和 `alt`。
-
-## 添加文章
-
-文章放在 `src/content/posts/`，复制现有文章的 frontmatter 后修改标题、描述、日期、分类和标签。`draft: true` 的文章不会进入公开列表、RSS 或搜索索引。
-
-## 更新 Uses
-
-编辑 `src/content/uses/` 目录下的 Markdown 文件。只添加实际正在使用、或能从真实项目确认的工具；这里不填写熟练度、百分比或进度条。
-
-## 发布前检查
+### 本地检查
 
 ```text
 pnpm lint
@@ -71,4 +39,8 @@ pnpm check
 pnpm build
 pnpm test
 pnpm test:privacy
+pnpm test:cf
+pnpm cf:dry-run
 ```
+
+不要把 GitHub token、OAuth Secret、`.env` 或私人笔记提交到仓库。

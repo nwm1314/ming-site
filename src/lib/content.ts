@@ -1,4 +1,4 @@
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
 import { getPostsForTaxonomy, getPageCount, isPublicPost, paginatePosts } from './content/rules';
 
@@ -10,15 +10,13 @@ export const BLOG_PAGE_SIZE = 8;
 export { getPageCount, paginatePosts };
 
 export async function getProfile() {
-  const profiles = await getCollection('profile');
-  const profile = profiles[0];
+  const profile = await getEntry('profile', 'ming');
   if (!profile) throw new Error('The profile content entry is missing.');
   return profile;
 }
 
 export async function getCurrentNow() {
-  const entries = await getCollection('now');
-  const current = entries[0];
+  const current = await getEntry('now', 'current');
   if (!current) throw new Error('The current now content entry is missing.');
   return current;
 }

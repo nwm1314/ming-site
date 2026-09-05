@@ -2,6 +2,7 @@
 import { formatDotDate, getCurrentNow } from '../../lib/content';
 
 const now = await getCurrentNow();
+const nowItems = [now.data.building, now.data.exploring, now.data.learning];
 ---
 
 <section class="now-section section-pad" id="now">
@@ -17,7 +18,7 @@ const now = await getCurrentNow();
       <span class="board-date">updated {formatDotDate(now.data.updatedAt)}</span>
     </div>
     <div class="now-items">
-      {now.data.items.map((item, index) => (
+      {nowItems.map((item, index) => (
         <div class:list={{ 'now-item': true, 'now-item-main': index === 0 }}>
           <span class="now-index">{String(index + 1).padStart(2, '0')}</span>
           <div><span class="now-kicker">{item.label}</span><strong>{item.text}</strong></div>
